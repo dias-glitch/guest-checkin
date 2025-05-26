@@ -178,6 +178,11 @@
         fail: "送信に失敗しました。",
         notfound: "予約情報が見つかりませんでした。",
         network: "通信エラーが発生しました。"
+        labelName: "名前：",
+      labelCode: "予約番号：",
+      labelCheckin: "チェックイン日：",
+      labelCheckout: "チェックアウト日：",
+      labelRoom: "部屋タイプ："
       },
       en: {
         formTitle: "Check-in Information",
@@ -192,6 +197,12 @@
         fail: "Submission failed.",
         notfound: "Reservation not found.",
         network: "Network error occurred."
+         labelName: "Name:",
+      labelCode: "Booking Number:",
+      labelCheckin: "Check-in Date:",
+      labelCheckout: "Check-out Date:",
+      labelRoom: "Room Type:"
+        
       },
       es: {
         formTitle: "Información de Check-in",
@@ -268,20 +279,23 @@
     fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
       .then(res => res.json())
       .then(data => {
-        if (data.result === "OK") {
-          const checkinDate = data.checkin.split("T")[0];
-          const checkoutDate = data.checkout.split("T")[0];
-          document.getElementById("guestInfo").innerHTML = `
-            <p><strong>名前：</strong>${name}</p>
-            <p><strong>予約番号：</strong>${booking}</p>
-            <p><strong>チェックイン日：</strong>${checkinDate}</p>
-            <p><strong>チェックアウト日：</strong>${checkoutDate}</p>
-            <p><strong>部屋タイプ：</strong>${data.room}</p>
-          `;
-        } else {
-          document.getElementById("guestInfo").innerText = translations[lang].notfound;
-        }
-      })
+        const t = translations[lang];  // ★翻訳データをここで読み込む
+
+  if (data.result === "OK") {
+    const checkinDate = data.checkin.split("T")[0];
+    const checkoutDate = data.checkout.split("T")[0];
+
+    document.getElementById("guestInfo").innerHTML =
+      `<p><strong>${t.labelName}</strong> ${name}</p>
+       <p><strong>${t.labelCode}</strong> ${booking}</p>
+       <p><strong>${t.labelCheckin}</strong> ${checkinDate}</p>
+       <p><strong>${t.labelCheckout}</strong> ${checkoutDate}</p>
+       <p><strong>${t.labelRoom}</strong> ${data.room}</p>`;
+  } else {
+    document.getElementById("guestInfo").innerText = t.notfound;
+  }
+})
+      
       .catch(() => {
         document.getElementById("guestInfo").innerText = translations[lang].network;
       });
