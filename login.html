@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Check-in WISEOWLHOSTELKYOTOログインページ</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+    }
+
+    .login-box {
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .login-box button {
+      width: 100%;
+      background-color: blue;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .login-box button:hover {
+      background-color: darkblue;
+    }
+
+    #message {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h3>WISE OWL HOSTEL KYOTO <h3>
+    <h2>ログイン</h2>
+        <form id="loginForm">
+      <input type="text" id="guestName" placeholder="予約者名" required>
+      <input type="text" id="bookingCode" placeholder="予約番号" required>
+      <button type="submit">ログイン</button>
+    </form>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzHEC_za6ymsvJzsB9595QZ29nQAA1PJ1HEAUd5crWgy6NHrHQPk7HRyF5qTt29AJnKLg/exec";
+
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("guestName").value.trim();
+      const booking = document.getElementById("bookingCode").value.trim();
+
+      fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}`)
+        .then(res => res.text())
+        .then(result => {
+          if (result === "OK") {
+            window.location.href = `checkin.html?name=${encodeURIComponent(name)}&booking=${booking}`;
+          } else {
+            document.getElementById("message").innerText = "予約情報が一致しませんでした。";
+          }
+        })
+        .catch(() => {
+          document.getElementById("message").innerText = "通信エラーが発生しました。";
+        });
+    });
+  </script>
+</body>
+</html>

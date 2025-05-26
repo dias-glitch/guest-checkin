@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>チェックインフォーム</title>
+  <style>
+      
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+    }
+
+    .checkin-box {
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 420px;
+    }
+
+    .checkin-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .checkin-box p {
+      margin: 8px 0;
+    }
+
+    form label {
+      display: block;
+      margin-top: 15px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .gender-row {
+      display: flex;
+      gap: 15px;
+      margin-top: 5px;
+    }
+
+    .gender-row label {
+      display: inline-flex;
+      align-items: center;
+      font-size: 14px;
+      white-space:nowrap;
+          }
+
+    .gender-row input {
+      margin-right: 5px;
+      
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      background-color: blue;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: darkblue;
+    }
+
+    #message {
+      color: green;
+      margin-top: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="checkin-box">
+    <h2>チェックイン情報</h2>
+    <div id="guestInfo">読み込み中...</div>
+
+    <form id="checkinForm">
+      <label>生年月日:
+        <input type="date" name="dob" required>
+      </label>
+
+      <label>性別:</label>
+      <div class="gender-row">
+        <label><input type="radio" name="gender" value="M" required> M</label>
+        <label><input type="radio" name="gender" value="F"> F</label>
+        <label><input type="radio" name="gender" value="Other"> その他</label>
+      </div>
+
+      <label>国籍:
+        <select name="nationality" required>
+          <option value="">選択してください</option>
+          <option value="Japan">Japan</option>
+          <option value="USA">USA</option>
+          <option value="China">China</option>
+          <option value="Germany">Germany</option>
+          <option value="France">France</option>
+        </select>
+      </label>
+
+      <label>前泊地:
+        <input type="text" name="previousStay" required>
+      </label>
+
+      <label>後泊地:
+        <input type="text" name="nextDestination" required>
+      </label>
+
+      <button type="submit">送信</button>
+    </form>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name");
+    const booking = params.get("booking");
+
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzHEC_za6ymsvJzsB9595QZ29nQAA1PJ1HEAUd5crWgy6NHrHQPk7HRyF5qTt29AJnKLg/exec";
+
+    // 予約情報を取得して表示
+    fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.result === "OK") {
+　　　　　const checkinDate = data.checkin.split("T")[0];
+        const checkoutDate = data.checkout.split("T")[0];
+
+          document.getElementById("guestInfo").innerHTML =
+            `<p><strong>名前：</strong>${name}</p>
+             <p><strong>予約番号：</strong>${booking}</p>
+             <p><strong>チェックイン日：</strong>${checkinDate}</p>
+             <p><strong>チェックアウト日：</strong>${checkoutDate}</p>
+             <p><strong>部屋タイプ：</strong>${data.room}</p>`;
+        } else {
+          document.getElementById("guestInfo").innerText = "予約情報が見つかりませんでした。";
+        }
+      })
+      .catch(() => {
+        document.getElementById("guestInfo").innerText = "通信エラーが発生しました。";
+      });
+
+    // フォーム送信処理
+    document.getElementById("checkinForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      formData.append("name", name);
+      formData.append("booking", booking);
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.text())
+      .then(res => {
+        if (res === "RECEIVED") {
+          document.getElementById("message").innerText = "送信が完了しました。3秒後にトップページへ移動します";
+        setTimeout(() => {
+    window.location.href = "https://wiseowlhostels.com/kyoto/";
+  }, 3000);
+        } else {
+          document.getElementById("message").innerText = "送信に失敗しました。";
+        }
+      })
+      .catch(() => {
+        document.getElementById("message").innerText = "通信エラーが発生しました。";
+      });
+    });
+  </script>
+</body>
+</html>
