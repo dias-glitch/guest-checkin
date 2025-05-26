@@ -29,16 +29,18 @@
     }
 
     .language-select {
-      text-align: center;
-      margin-bottom: 10px;
-    }
+  text-align: center;
+  margin-bottom: 15px;
+}
 
-    .language-select select {
-      padding: 5px 10px;
-      border-radius: 5px;
-      background-color: #f2f2f2;
-      border: 1px solid #ccc;
-    }
+.language-select select {
+  padding: 6px;
+  font-size: 14px;
+  width: 160px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
 
     .checkin-box p {
       margin: 8px 0;
@@ -57,6 +59,17 @@
       border-radius: 5px;
     }
 
+    .dob-row {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.dob-row select {
+  width: 90px;
+  padding: 6px;
+  font-size: 14px;
+}
     .gender-row {
       display: flex;
       gap: 15px;
@@ -116,9 +129,13 @@
     <div id="guestInfo">読み込み中...</div>
 
     <form id="checkinForm">
-      <label id="labelDob">生年月日:
-        <input type="date" name="dob" required>
-      </label>
+      <label id="labelDob">生年月日:</label>
+<div class="dob-row">
+  <select id="dob-year" required></select> 年
+  <select id="dob-month" required></select> 月
+  <select id="dob-day" required></select> 日
+</div>
+<input type="hidden" name="dob" id="dob-hidden">
 
       <label id="labelGender">性別:</label>
       <div class="gender-row">
@@ -225,7 +242,37 @@
         network: "網路錯誤。"
       }
     };
+// 生年月日の select を初期化
+const yearSelect = document.getElementById("dob-year");
+const monthSelect = document.getElementById("dob-month");
+const daySelect = document.getElementById("dob-day");
+const hiddenDob = document.getElementById("dob-hidden");
 
+for (let y = 2025; y >= 1900; y--) {
+  yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+}
+for (let m = 1; m <= 12; m++) {
+  const mm = m.toString().padStart(2, "0");
+  monthSelect.innerHTML += `<option value="${mm}">${m}</option>`;
+}
+function updateDays() {
+  const year = parseInt(yearSelect.value);
+  const month = parseInt(monthSelect.value);
+  const days = new Date(year, month, 0).getDate();
+  daySelect.innerHTML = "";
+  for (let d = 1; d <= days; d++) {
+    const dd = d.toString().padStart(2, "0");
+    daySelect.innerHTML += `<option value="${dd}">${d}</option>`;
+  }
+}
+yearSelect.addEventListener("change", updateDays);
+monthSelect.addEventListener("change", updateDays);
+updateDays();
+
+// 送信時に dob を組み立てて hidden に格納
+document.getElementById("checkinForm").addEventListener("submit", function () {
+  hiddenDob.value = `${yearSelect.value}-${monthSelect.value}-${daySelect.value}`;
+});
     // ✅③ 言語選択・保持・反映
     const params = new URLSearchParams(window.location.search);
     const name = params.get("name");
