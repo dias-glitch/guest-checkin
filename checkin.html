@@ -140,15 +140,14 @@
       </div>
 
       <label id="labelNationality">国籍:</label>
-        <select name="nationality" required>
-          <option value="">選択してください</option>
-          <option value="Japan">Japan</option>
-          <option value="USA">USA</option>
-          <option value="China">China</option>
-          <option value="Germany">Germany</option>
-          <option value="France">France</option>
-          
-        </select>
+<select name="nationality" id="nationalitySelect" required>
+  <option value="">{emptyNationality}</option>
+  <option value="Japan" data-i18n-option="countryJapan">Japan</option>
+  <option value="USA" data-i18n-option="countryUSA">USA</option>
+  <option value="China" data-i18n-option="countryChina">China</option>
+  <option value="Germany" data-i18n-option="countryGermany">Germany</option>
+  <option value="France" data-i18n-option="countryFrance">France</option>
+</select>
       
 
       <label id="labelPrev">前泊地:</label>
