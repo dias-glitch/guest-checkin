@@ -91,9 +91,13 @@
     <div id="guestInfo">読み込み中...</div>
 
     <form id="checkinForm">
-      <label>生年月日:
-        <input type="date" name="dob" required>
-      </label>
+      <label>生年月日:</label>
+      <div id="dob-selects">
+        <select id="dob-year" required></select> 年
+        <select id="dob-month" required></select> 月
+        <select id="dob-day" required></select> 日
+      </div>
+      <input type="hidden" name="dob" id="dob=hidden">
 
       <label>性別:</label>
       <div class="gender-row">
@@ -126,66 +130,99 @@
     <p id="message"></p>
   </div>
 
-  <script>
-    // パラメータ取得＆未入力なら強制ログアウト
-    const params = new URLSearchParams(window.location.search);
-    const name = params.get("name");
-    const booking = params.get("booking");
+ <script>
+  // パラメータ取得＆未入力なら強制ログアウト
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get("name");
+  const booking = params.get("booking");
 
-    if (!name || !booking) {
-      window.location.href = "login.html";
-    }
+  if (!name || !booking) {
+    window.location.href = "login.html";
+  }
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
 
-    // チェックイン情報の読み込み表示
-    fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.result === "OK") {
-          const checkinDate = data.checkin.split("T")[0];
-          const checkoutDate = data.checkout.split("T")[0];
+  // チェックイン情報の読み込み表示
+  fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.result === "OK") {
+        const checkinDate = data.checkin.split("T")[0];
+        const checkoutDate = data.checkout.split("T")[0];
 
-          document.getElementById("guestInfo").innerHTML =
-            `<p><strong>名前：</strong>${name}</p>
-             <p><strong>予約番号：</strong>${booking}</p>
-             <p><strong>チェックイン日：</strong>${checkinDate}</p>
-             <p><strong>チェックアウト日：</strong>${checkoutDate}</p>
-             <p><strong>部屋タイプ：</strong>${data.room}</p>`;
-        } else {
-          document.getElementById("guestInfo").innerText = "予約情報が見つかりませんでした。";
-        }
-      })
-      .catch(() => {
-        document.getElementById("guestInfo").innerText = "通信エラーが発生しました。";
-      });
-
-    // 送信処理
-    document.getElementById("checkinForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      formData.append("name", name);
-      formData.append("booking", booking);
-
-      fetch(scriptURL, {
-        method: "POST",
-        body: formData
-      })
-      .then(res => res.text())
-      .then(res => {
-        if (res === "RECEIVED") {
-          document.getElementById("message").innerText = "送信が完了しました。3秒後にトップページへ移動します。";
-          setTimeout(() => {
-            window.location.href = "https://wiseowlhostels.com/kyoto/";
-          }, 3000);
-        } else {
-          document.getElementById("message").innerText = "送信に失敗しました。";
-        }
-      })
-      .catch(() => {
-        document.getElementById("message").innerText = "通信エラーが発生しました。";
-      });
+        document.getElementById("guestInfo").innerHTML =
+          `<p><strong>名前：</strong>${name}</p>
+           <p><strong>予約番号：</strong>${booking}</p>
+           <p><strong>チェックイン日：</strong>${checkinDate}</p>
+           <p><strong>チェックアウト日：</strong>${checkoutDate}</p>
+           <p><strong>部屋タイプ：</strong>${data.room}</p>`;
+      } else {
+        document.getElementById("guestInfo").innerText = "予約情報が見つかりませんでした。";
+      }
+    })
+    .catch(() => {
+      document.getElementById("guestInfo").innerText = "通信エラーが発生しました。";
     });
-  </script>
+
+  // 🔽 生年月日：ドロップダウン生成と同期処理
+  const yearSelect = document.getElementById("dob-year");
+  const monthSelect = document.getElementById("dob-month");
+  const daySelect = document.getElementById("dob-day");
+  const hiddenDob = document.getElementById("dob-hidden");
+
+  for (let y = 2025; y >= 1900; y--) {
+    yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+  }
+
+  for (let m = 1; m <= 12; m++) {
+    monthSelect.innerHTML += `<option value="${m.toString().padStart(2, '0')}">${m}</option>`;
+  }
+
+  function updateDays() {
+    const year = parseInt(yearSelect.value);
+    const month = parseInt(monthSelect.value);
+    const daysInMonth = new Date(year, month, 0).getDate();
+    daySelect.innerHTML = "";
+    for (let d = 1; d <= daysInMonth; d++) {
+      daySelect.innerHTML += `<option value="${d.toString().padStart(2, '0')}">${d}</option>`;
+    }
+  }
+
+  yearSelect.addEventListener("change", updateDays);
+  monthSelect.addEventListener("change", updateDays);
+  updateDays();
+
+  // ✅ 送信処理
+  document.getElementById("checkinForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    // 生年月日を hidden にまとめる処理をここで追加
+    const dob = `${yearSelect.value}-${monthSelect.value}-${daySelect.value}`;
+    hiddenDob.value = dob;
+
+    const formData = new FormData(e.target);
+    formData.append("name", name);
+    formData.append("booking", booking);
+
+    fetch(scriptURL, {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.text())
+    .then(res => {
+      if (res === "RECEIVED") {
+        document.getElementById("message").innerText = "送信が完了しました。3秒後にトップページへ移動します。";
+        setTimeout(() => {
+          window.location.href = "https://wiseowlhostels.com/kyoto/";
+        }, 3000);
+      } else {
+        document.getElementById("message").innerText = "送信に失敗しました。";
+      }
+    })
+    .catch(() => {
+      document.getElementById("message").innerText = "通信エラーが発生しました。";
+    });
+  });
+</script>
 </body>
 </html>
