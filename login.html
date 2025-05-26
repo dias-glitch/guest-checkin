@@ -166,7 +166,7 @@
         .then(res => res.text())
         .then(result => {
           if (result === "OK") {
-            window.location.href = `checkin.html?name=${encodeURIComponent(name)}&booking=${booking}`;
+            window.location.href = `checkin.html?name=${encodeURIComponent(name)}&booking=${booking}&lang=${currentLang}`;
           } else {
             document.getElementById("message").innerText = translations[currentLang].error;
           }
