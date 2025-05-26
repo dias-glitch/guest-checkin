@@ -312,6 +312,14 @@ countryFrance: "法國"
       document.getElementById("guestInfo").innerText = t.loading;
       document.getElementById("languageSelect").value = lang;
       localStorage.setItem("lang", lang);
+
+      // 国籍プルダウン翻訳
+const options = document.querySelectorAll("#nationalitySelect option[data-i18n-option]");
+options.forEach(option => {
+  const key = option.getAttribute("data-i18n-option");
+  option.innerText = t[key];
+});
+document.querySelector("#nationalitySelect option[value='']").innerText = t.emptyNationality;
     }
 
     function setLanguage(lang) {
