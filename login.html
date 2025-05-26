@@ -7,25 +7,46 @@
     body {
       margin: 0;
       padding: 0;
-      height: 100vh;
       background-color: #f0f2f5;
+      font-family: sans-serif;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: sans-serif;
+      position: relative;
+    }
+
+    .lang-select {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 14px;
+    }
+
+    .lang-select select {
+      padding: 5px;
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
 
     .login-box {
       background-color: white;
       padding: 30px 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       width: 320px;
       text-align: center;
     }
 
+    .login-box h1 {
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
     .login-box h2 {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     .login-box input {
@@ -55,40 +76,22 @@
       color: red;
       margin-top: 10px;
     }
-
-    .lang-buttons {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 14px;
-  background-color: transparent;
-  z-index: 999;
-}
-
-.lang-buttons select {
-  margin-left: 5px;
-  padding: 5px;
-  font-size: 14px;
-  background-color: #f2f2f2; /* 白っぽい灰色 */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
   </style>
 </head>
 <body>
-  <div class="login-box"> <!-- ←ここから始まる -->
 
-    <div class="lang-buttons">
-      🌐 Language:
-      <select id="languageSelect" onchange="setLanguage(this.value)">
-        <option value="ja">日本語</option>
-        <option value="en">English</option>
-        <option value="es">Español</option>
-        <option value="zh-CN">简体中文</option>
-        <option value="zh-TW">繁體中文</option>
-      </select>
-    </div>
+  <div class="lang-select">
+    <select id="languageSelect" onchange="setLanguage(this.value)">
+      <option value="ja">日本語</option>
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="zh-CN">简体中文</option>
+      <option value="zh-TW">繁體中文</option>
+    </select>
+  </div>
 
+  <div class="login-box">
+    <h1>WISE OWL HOSTEL KYOTO</h1>
     <h2 id="title">ログイン</h2>
     <form id="loginForm">
       <input type="text" id="guestName" placeholder="予約者名" required>
@@ -96,7 +99,6 @@
       <button type="submit" id="loginBtn">ログイン</button>
     </form>
     <p id="message"></p>
-
   </div>
 
   <script>
@@ -154,6 +156,7 @@
       document.getElementById("guestName").placeholder = t.name;
       document.getElementById("bookingCode").placeholder = t.code;
       document.getElementById("loginBtn").innerText = t.button;
+      document.getElementById("languageSelect").value = lang;
       localStorage.setItem("lang", lang);
     }
 
