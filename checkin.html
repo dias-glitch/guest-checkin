@@ -1,3 +1,14 @@
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get("name");
+  const booking = params.get("booking");
+
+  if (!name || !booking) {
+    // パラメータがない場合は login.html に強制リダイレクト
+    window.location.href = "login.html";
+  }
+</script>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
