@@ -1,21 +1,9 @@
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const name = params.get("name");
-  const booking = params.get("booking");
-
-  if (!name || !booking) {
-    // パラメータがない場合は login.html に強制リダイレクト
-    window.location.href = "login.html";
-  }
-</script>
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <title>チェックインフォーム</title>
   <style>
-      
     body {
       margin: 0;
       padding: 0;
@@ -67,12 +55,11 @@
       display: inline-flex;
       align-items: center;
       font-size: 14px;
-      white-space:nowrap;
-          }
+      white-space: nowrap;
+    }
 
     .gender-row input {
       margin-right: 5px;
-      
     }
 
     button {
@@ -140,19 +127,24 @@
   </div>
 
   <script>
+    // パラメータ取得＆未入力なら強制ログアウト
     const params = new URLSearchParams(window.location.search);
     const name = params.get("name");
     const booking = params.get("booking");
 
+    if (!name || !booking) {
+      window.location.href = "login.html";
+    }
+
     const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
 
-    // 予約情報を取得して表示
+    // チェックイン情報の読み込み表示
     fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
       .then(res => res.json())
       .then(data => {
         if (data.result === "OK") {
-　　　　　const checkinDate = data.checkin.split("T")[0];
-        const checkoutDate = data.checkout.split("T")[0];
+          const checkinDate = data.checkin.split("T")[0];
+          const checkoutDate = data.checkout.split("T")[0];
 
           document.getElementById("guestInfo").innerHTML =
             `<p><strong>名前：</strong>${name}</p>
@@ -168,7 +160,7 @@
         document.getElementById("guestInfo").innerText = "通信エラーが発生しました。";
       });
 
-    // フォーム送信処理
+    // 送信処理
     document.getElementById("checkinForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const formData = new FormData(e.target);
@@ -182,10 +174,10 @@
       .then(res => res.text())
       .then(res => {
         if (res === "RECEIVED") {
-          document.getElementById("message").innerText = "送信が完了しました。3秒後にトップページへ移動します";
-        setTimeout(() => {
-    window.location.href = "https://wiseowlhostels.com/kyoto/";
-  }, 3000);
+          document.getElementById("message").innerText = "送信が完了しました。3秒後にトップページへ移動します。";
+          setTimeout(() => {
+            window.location.href = "https://wiseowlhostels.com/kyoto/";
+          }, 3000);
         } else {
           document.getElementById("message").innerText = "送信に失敗しました。";
         }
