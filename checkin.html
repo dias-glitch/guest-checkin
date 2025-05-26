@@ -144,7 +144,7 @@
     const name = params.get("name");
     const booking = params.get("booking");
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzHEC_za6ymsvJzsB9595QZ29nQAA1PJ1HEAUd5crWgy6NHrHQPk7HRyF5qTt29AJnKLg/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwyhGdKupVZlMz3ezMwXgEtutX1Y9is5ddlVNmZ-OLrVrUJWuSPv9DIDdv5uxyVOghXzw/exec";
 
     // 予約情報を取得して表示
     fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
