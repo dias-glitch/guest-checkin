@@ -180,6 +180,17 @@
     <p id="message"></p>
   </div>
 
+  <!-- ✅ Select2 多言語UIの初期化 -->
+  <script>
+    $(document).ready(function () {
+      $('#nationalitySelect').select2({
+        width: '100%',
+        minimumResultsForSearch: 5,
+        language: lang  // "ja", "en", "zh-CN", "ko" など
+      });
+    });
+  </script>
+
   <script>
     // ✅② 翻訳データ
     const translations = {
