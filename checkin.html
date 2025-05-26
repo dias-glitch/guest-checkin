@@ -1,88 +1,91 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>チェックインフォーム</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      height: 100vh;
+      font-family: sans-serif;
       background-color: #f0f2f5;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: sans-serif;
+      min-height: 100vh;
     }
 
     .checkin-box {
       background-color: white;
-      padding: 30px 40px;
+      padding: 30px 25px;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 420px;
+      width: 100%;
+      max-width: 420px;
+      box-sizing: border-box;
+      position: relative;
     }
 
-    .checkin-box h2 {
-      text-align: center;
-      margin-bottom: 20px;
+    .lang-box {
+      position: absolute;
+      top: 10px;
+      right: 10px;
     }
 
-    .language-select {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .language-select select {
-      padding: 5px 10px;
+    .lang-box select {
+      font-size: 14px;
+      padding: 4px 6px;
       border-radius: 5px;
       background-color: #f2f2f2;
       border: 1px solid #ccc;
     }
 
-    .checkin-box p {
-      margin: 8px 0;
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
     }
 
-    form label {
+    label {
       display: block;
       margin-top: 15px;
+      font-size: 15px;
     }
 
-    input, select {
+    input,
+    select {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 16px;
       border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+      box-sizing: border-box;
     }
 
     .gender-row {
       display: flex;
-      gap: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
       margin-top: 5px;
     }
 
     .gender-row label {
-      display: inline-flex;
+      display: flex;
       align-items: center;
+      gap: 5px;
       font-size: 14px;
-      white-space: nowrap;
-    }
-
-    .gender-row input {
-      margin-right: 5px;
     }
 
     button {
       width: 100%;
-      margin-top: 20px;
       background-color: blue;
       color: white;
-      padding: 10px;
+      padding: 12px;
+      font-size: 16px;
       border: none;
       border-radius: 5px;
-      font-size: 16px;
+      margin-top: 25px;
       cursor: pointer;
     }
 
@@ -91,9 +94,16 @@
     }
 
     #message {
-      color: green;
-      margin-top: 15px;
       text-align: center;
+      margin-top: 15px;
+      color: green;
+      font-size: 14px;
+    }
+
+    @media screen and (max-width: 480px) {
+      .gender-row {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -227,7 +237,7 @@
     };
 
     // ✅③ 言語選択・保持・反映
-    const params = new URLSearchParams(window.location.search);
+     const params = new URLSearchParams(window.location.search);
     const name = params.get("name");
     const booking = params.get("booking");
     const lang = params.get("lang") || localStorage.getItem("lang") || "ja";
@@ -252,7 +262,6 @@
 
     applyLanguage(lang);
 
-    // ✅④ チェックイン情報取得
     const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
 
     fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
@@ -261,13 +270,13 @@
         if (data.result === "OK") {
           const checkinDate = data.checkin.split("T")[0];
           const checkoutDate = data.checkout.split("T")[0];
-
-          document.getElementById("guestInfo").innerHTML =
-            `<p><strong>名前：</strong>${name}</p>
-             <p><strong>予約番号：</strong>${booking}</p>
-             <p><strong>チェックイン日：</strong>${checkinDate}</p>
-             <p><strong>チェックアウト日：</strong>${checkoutDate}</p>
-             <p><strong>部屋タイプ：</strong>${data.room}</p>`;
+          document.getElementById("guestInfo").innerHTML = `
+            <p><strong>名前：</strong>${name}</p>
+            <p><strong>予約番号：</strong>${booking}</p>
+            <p><strong>チェックイン日：</strong>${checkinDate}</p>
+            <p><strong>チェックアウト日：</strong>${checkoutDate}</p>
+            <p><strong>部屋タイプ：</strong>${data.room}</p>
+          `;
         } else {
           document.getElementById("guestInfo").innerText = translations[lang].notfound;
         }
@@ -276,32 +285,30 @@
         document.getElementById("guestInfo").innerText = translations[lang].network;
       });
 
-    // ✅ 送信処理
-    document.getElementById("checkinForm").addEventListener("submit", function(e) {
+    document.getElementById("checkinForm").addEventListener("submit", function (e) {
       e.preventDefault();
-
       const formData = new FormData(e.target);
       formData.append("name", name);
       formData.append("booking", booking);
 
       fetch(scriptURL, {
         method: "POST",
-        body: formData
+        body: formData,
       })
-      .then(res => res.text())
-      .then(res => {
-        if (res === "RECEIVED") {
-          document.getElementById("message").innerText = translations[lang].success;
-          setTimeout(() => {
-            window.location.href = "https://wiseowlhostels.com/kyoto/";
-          }, 3000);
-        } else {
-          document.getElementById("message").innerText = translations[lang].fail;
-        }
-      })
-      .catch(() => {
-        document.getElementById("message").innerText = translations[lang].network;
-      });
+        .then((res) => res.text())
+        .then((res) => {
+          if (res === "RECEIVED") {
+            document.getElementById("message").innerText = translations[lang].success;
+            setTimeout(() => {
+              window.location.href = "https://wiseowlhostels.com/kyoto/";
+            }, 3000);
+          } else {
+            document.getElementById("message").innerText = translations[lang].fail;
+          }
+        })
+        .catch(() => {
+          document.getElementById("message").innerText = translations[lang].network;
+        });
     });
   </script>
 </body>
