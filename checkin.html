@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>Check-in Login</title>
+  <title>チェックインフォーム</title>
   <style>
     body {
       margin: 0;
@@ -15,29 +15,68 @@
       font-family: sans-serif;
     }
 
-    .login-box {
+    .checkin-box {
       background-color: white;
       padding: 30px 40px;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 320px;
-      text-align: center;
+      width: 420px;
     }
 
-    .login-box h2 {
+    .checkin-box h2 {
+      text-align: center;
       margin-bottom: 20px;
     }
 
-    .login-box input {
+    .language-select {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .language-select select {
+      padding: 5px 10px;
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+    }
+
+    .checkin-box p {
+      margin: 8px 0;
+    }
+
+    form label {
+      display: block;
+      margin-top: 15px;
+    }
+
+    input, select {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
+      padding: 8px;
+      margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
 
-    .login-box button {
+    .gender-row {
+      display: flex;
+      gap: 15px;
+      margin-top: 5px;
+    }
+
+    .gender-row label {
+      display: inline-flex;
+      align-items: center;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .gender-row input {
+      margin-right: 5px;
+    }
+
+    button {
       width: 100%;
+      margin-top: 20px;
       background-color: blue;
       color: white;
       padding: 10px;
@@ -47,139 +86,222 @@
       cursor: pointer;
     }
 
-    .login-box button:hover {
+    button:hover {
       background-color: darkblue;
     }
 
     #message {
-      color: red;
-      margin-top: 10px;
+      color: green;
+      margin-top: 15px;
+      text-align: center;
     }
-
-    .lang-buttons {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 14px;
-  background-color: transparent;
-  z-index: 999;
-}
-
-.lang-buttons select {
-  margin-left: 5px;
-  padding: 5px;
-  font-size: 14px;
-  background-color: #f2f2f2; /* 白っぽい灰色 */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
   </style>
 </head>
 <body>
-  <div class="lang-buttons">
-  🌐 Language:
-  <select id="languageSelect" onchange="setLanguage(this.value)">
-    <option value="ja">日本語</option>
-    <option value="en">English</option>
-    <option value="es">Español</option>
-    <option value="zh-CN">简体中文</option>
-    <option value="zh-TW">繁體中文</option>
-  </select>
-</div>
+  <div class="checkin-box">
+    
+    <!-- ✅① 言語切り替え -->
+    <div class="language-select">
+      🌐 
+      <select id="languageSelect" onchange="setLanguage(this.value)">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="zh-CN">简体中文</option>
+        <option value="zh-TW">繁體中文</option>
+      </select>
+    </div>
 
-    <h2 id="title">ログイン</h2>
-    <form id="loginForm">
-      <input type="text" id="guestName" placeholder="予約者名" required>
-      <input type="text" id="bookingCode" placeholder="予約番号" required>
-      <button type="submit" id="loginBtn">ログイン</button>
+    <h2 id="formTitle">チェックイン情報</h2>
+    <div id="guestInfo">読み込み中...</div>
+
+    <form id="checkinForm">
+      <label id="labelDob">生年月日:
+        <input type="date" name="dob" required>
+      </label>
+
+      <label id="labelGender">性別:</label>
+      <div class="gender-row">
+        <label><input type="radio" name="gender" value="M" required> M</label>
+        <label><input type="radio" name="gender" value="F"> F</label>
+        <label><input type="radio" name="gender" value="Other"> その他</label>
+      </div>
+
+      <label id="labelNationality">国籍:
+        <select name="nationality" required>
+          <option value="">選択してください</option>
+          <option value="Japan">Japan</option>
+          <option value="USA">USA</option>
+          <option value="China">China</option>
+          <option value="Germany">Germany</option>
+          <option value="France">France</option>
+        </select>
+      </label>
+
+      <label id="labelPrev">前泊地:
+        <input type="text" name="previousStay" required>
+      </label>
+
+      <label id="labelNext">後泊地:
+        <input type="text" name="nextDestination" required>
+      </label>
+
+      <button type="submit" id="submitBtn">送信</button>
     </form>
     <p id="message"></p>
   </div>
 
   <script>
+    // ✅② 翻訳データ
     const translations = {
       ja: {
-        title: "ログイン",
-        name: "予約者名",
-        code: "予約番号",
-        button: "ログイン",
-        error: "予約情報が一致しませんでした。",
+        formTitle: "チェックイン情報",
+        labelDob: "生年月日:",
+        labelGender: "性別:",
+        labelNationality: "国籍:",
+        labelPrev: "前泊地:",
+        labelNext: "後泊地:",
+        submit: "送信",
+        loading: "読み込み中...",
+        success: "送信が完了しました。3秒後にトップページへ移動します。",
+        fail: "送信に失敗しました。",
+        notfound: "予約情報が見つかりませんでした。",
         network: "通信エラーが発生しました。"
       },
       en: {
-        title: "Login",
-        name: "Guest Name",
-        code: "Booking Code",
-        button: "Login",
-        error: "Reservation not found.",
+        formTitle: "Check-in Information",
+        labelDob: "Date of Birth:",
+        labelGender: "Gender:",
+        labelNationality: "Nationality:",
+        labelPrev: "Previous Stay:",
+        labelNext: "Next Destination:",
+        submit: "Submit",
+        loading: "Loading...",
+        success: "Submitted successfully. Redirecting in 3 seconds.",
+        fail: "Submission failed.",
+        notfound: "Reservation not found.",
         network: "Network error occurred."
       },
       es: {
-        title: "Iniciar sesión",
-        name: "Nombre del huésped",
-        code: "Código de reserva",
-        button: "Entrar",
-        error: "No se encontró la reserva.",
+        formTitle: "Información de Check-in",
+        labelDob: "Fecha de nacimiento:",
+        labelGender: "Género:",
+        labelNationality: "Nacionalidad:",
+        labelPrev: "Alojamiento anterior:",
+        labelNext: "Próximo destino:",
+        submit: "Enviar",
+        loading: "Cargando...",
+        success: "Enviado correctamente. Redirigiendo en 3 segundos.",
+        fail: "Error al enviar.",
+        notfound: "No se encontró la reserva.",
         network: "Error de red."
       },
       "zh-CN": {
-        title: "登录",
-        name: "预订者姓名",
-        code: "预订号码",
-        button: "登录",
-        error: "未找到预订信息。",
+        formTitle: "入住信息",
+        labelDob: "出生日期：",
+        labelGender: "性别：",
+        labelNationality: "国籍：",
+        labelPrev: "前一住宿地：",
+        labelNext: "下一目的地：",
+        submit: "提交",
+        loading: "加载中...",
+        success: "提交成功。3秒后跳转主页。",
+        fail: "提交失败。",
+        notfound: "未找到预订信息。",
         network: "网络错误。"
       },
       "zh-TW": {
-        title: "登入",
-        name: "預訂者姓名",
-        code: "預訂編號",
-        button: "登入",
-        error: "找不到預訂資訊。",
+        formTitle: "入住資訊",
+        labelDob: "出生日期：",
+        labelGender: "性別：",
+        labelNationality: "國籍：",
+        labelPrev: "前一住宿地：",
+        labelNext: "下一目的地：",
+        submit: "送出",
+        loading: "載入中...",
+        success: "已送出。3秒後返回首頁。",
+        fail: "送出失敗。",
+        notfound: "找不到預訂資訊。",
         network: "網路錯誤。"
       }
     };
 
-    let currentLang = localStorage.getItem("lang") || navigator.language || "ja";
-    if (!translations[currentLang]) {
-      currentLang = currentLang.startsWith("zh") ? "zh-CN" : currentLang.startsWith("es") ? "es" : "en";
-    }
+    // ✅③ 言語選択・保持・反映
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name");
+    const booking = params.get("booking");
+    const lang = params.get("lang") || localStorage.getItem("lang") || "ja";
 
     function applyLanguage(lang) {
       const t = translations[lang];
-      document.getElementById("title").innerText = t.title;
-      document.getElementById("guestName").placeholder = t.name;
-      document.getElementById("bookingCode").placeholder = t.code;
-      document.getElementById("loginBtn").innerText = t.button;
+      document.getElementById("formTitle").innerText = t.formTitle;
+      document.getElementById("labelDob").innerText = t.labelDob;
+      document.getElementById("labelGender").innerText = t.labelGender;
+      document.getElementById("labelNationality").innerText = t.labelNationality;
+      document.getElementById("labelPrev").innerText = t.labelPrev;
+      document.getElementById("labelNext").innerText = t.labelNext;
+      document.getElementById("submitBtn").innerText = t.submit;
+      document.getElementById("guestInfo").innerText = t.loading;
+      document.getElementById("languageSelect").value = lang;
       localStorage.setItem("lang", lang);
     }
 
     function setLanguage(lang) {
-      currentLang = lang;
       applyLanguage(lang);
     }
 
-    applyLanguage(currentLang);
+    applyLanguage(lang);
 
+    // ✅④ チェックイン情報取得
     const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
 
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const name = document.getElementById("guestName").value.trim();
-      const booking = document.getElementById("bookingCode").value.trim();
+    fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.result === "OK") {
+          const checkinDate = data.checkin.split("T")[0];
+          const checkoutDate = data.checkout.split("T")[0];
 
-      fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}`)
-        .then(res => res.text())
-        .then(result => {
-          if (result === "OK") {
-            window.location.href = `checkin.html?name=${encodeURIComponent(name)}&booking=${booking}`;
-          } else {
-            document.getElementById("message").innerText = translations[currentLang].error;
-          }
-        })
-        .catch(() => {
-          document.getElementById("message").innerText = translations[currentLang].network;
-        });
+          document.getElementById("guestInfo").innerHTML =
+            `<p><strong>名前：</strong>${name}</p>
+             <p><strong>予約番号：</strong>${booking}</p>
+             <p><strong>チェックイン日：</strong>${checkinDate}</p>
+             <p><strong>チェックアウト日：</strong>${checkoutDate}</p>
+             <p><strong>部屋タイプ：</strong>${data.room}</p>`;
+        } else {
+          document.getElementById("guestInfo").innerText = translations[lang].notfound;
+        }
+      })
+      .catch(() => {
+        document.getElementById("guestInfo").innerText = translations[lang].network;
+      });
+
+    // ✅ 送信処理
+    document.getElementById("checkinForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      formData.append("name", name);
+      formData.append("booking", booking);
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.text())
+      .then(res => {
+        if (res === "RECEIVED") {
+          document.getElementById("message").innerText = translations[lang].success;
+          setTimeout(() => {
+            window.location.href = "https://wiseowlhostels.com/kyoto/";
+          }, 3000);
+        } else {
+          document.getElementById("message").innerText = translations[lang].fail;
+        }
+      })
+      .catch(() => {
+        document.getElementById("message").innerText = translations[lang].network;
+      });
     });
   </script>
 </body>
