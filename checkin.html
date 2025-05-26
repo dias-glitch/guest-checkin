@@ -10,9 +10,23 @@
       height: 100vh;
       background-color: #f0f2f5;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       font-family: sans-serif;
+    }
+
+    .language-select {
+      text-align: center;
+      margin: 20px 0 10px 0;
+    }
+
+    .language-select select {
+      padding: 6px;
+      font-size: 14px;
+      width: 160px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
     }
 
     .checkin-box {
@@ -27,20 +41,6 @@
       text-align: center;
       margin-bottom: 20px;
     }
-
-    .language-select {
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.language-select select {
-  padding: 6px;
-  font-size: 14px;
-  width: 160px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-}
 
     .checkin-box p {
       margin: 8px 0;
@@ -60,16 +60,17 @@
     }
 
     .dob-row {
-  display: flex;
-  gap: 5px;
-  margin-top: 5px;
-}
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+    }
 
-.dob-row select {
-  width: 90px;
-  padding: 6px;
-  font-size: 14px;
-}
+    .dob-row select {
+      width: 90px;
+      padding: 6px;
+      font-size: 14px;
+    }
+
     .gender-row {
       display: flex;
       gap: 15px;
@@ -111,31 +112,30 @@
   </style>
 </head>
 <body>
-  <div class="checkin-box">
-    
-    <!-- ✅① 言語切り替え -->
-    <div class="language-select">
-      🌐 
-      <select id="languageSelect" onchange="setLanguage(this.value)">
-        <option value="ja">日本語</option>
-        <option value="en">English</option>
-        <option value="es">Español</option>
-        <option value="zh-CN">简体中文</option>
-        <option value="zh-TW">繁體中文</option>
-      </select>
-    </div>
 
+  <div class="language-select">
+    🌐 
+    <select id="languageSelect" onchange="setLanguage(this.value)">
+      <option value="ja">日本語</option>
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="zh-CN">简体中文</option>
+      <option value="zh-TW">繁體中文</option>
+    </select>
+  </div>
+
+  <div class="checkin-box">
     <h2 id="formTitle">チェックイン情報</h2>
     <div id="guestInfo">読み込み中...</div>
 
     <form id="checkinForm">
       <label id="labelDob">生年月日:</label>
-<div class="dob-row">
-  <select id="dob-year" required></select> 年
-  <select id="dob-month" required></select> 月
-  <select id="dob-day" required></select> 日
-</div>
-<input type="hidden" name="dob" id="dob-hidden">
+      <div class="dob-row">
+        <select id="dob-year" required></select> 年
+        <select id="dob-month" required></select> 月
+        <select id="dob-day" required></select> 日
+      </div>
+      <input type="hidden" name="dob" id="dob-hidden">
 
       <label id="labelGender">性別:</label>
       <div class="gender-row">
@@ -169,7 +169,6 @@
   </div>
 
   <script>
-    // ✅② 翻訳データ
     const translations = {
       ja: {
         formTitle: "チェックイン情報",
@@ -242,38 +241,7 @@
         network: "網路錯誤。"
       }
     };
-// 生年月日の select を初期化
-const yearSelect = document.getElementById("dob-year");
-const monthSelect = document.getElementById("dob-month");
-const daySelect = document.getElementById("dob-day");
-const hiddenDob = document.getElementById("dob-hidden");
 
-for (let y = 2025; y >= 1900; y--) {
-  yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
-}
-for (let m = 1; m <= 12; m++) {
-  const mm = m.toString().padStart(2, "0");
-  monthSelect.innerHTML += `<option value="${mm}">${m}</option>`;
-}
-function updateDays() {
-  const year = parseInt(yearSelect.value);
-  const month = parseInt(monthSelect.value);
-  const days = new Date(year, month, 0).getDate();
-  daySelect.innerHTML = "";
-  for (let d = 1; d <= days; d++) {
-    const dd = d.toString().padStart(2, "0");
-    daySelect.innerHTML += `<option value="${dd}">${d}</option>`;
-  }
-}
-yearSelect.addEventListener("change", updateDays);
-monthSelect.addEventListener("change", updateDays);
-updateDays();
-
-// 送信時に dob を組み立てて hidden に格納
-document.getElementById("checkinForm").addEventListener("submit", function () {
-  hiddenDob.value = `${yearSelect.value}-${monthSelect.value}-${daySelect.value}`;
-});
-    // ✅③ 言語選択・保持・反映
     const params = new URLSearchParams(window.location.search);
     const name = params.get("name");
     const booking = params.get("booking");
@@ -299,7 +267,35 @@ document.getElementById("checkinForm").addEventListener("submit", function () {
 
     applyLanguage(lang);
 
-    // ✅④ チェックイン情報取得
+    const yearSelect = document.getElementById("dob-year");
+    const monthSelect = document.getElementById("dob-month");
+    const daySelect = document.getElementById("dob-day");
+    const hiddenDob = document.getElementById("dob-hidden");
+
+    for (let y = 2025; y >= 1900; y--) {
+      yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+    }
+
+    for (let m = 1; m <= 12; m++) {
+      const mm = m.toString().padStart(2, "0");
+      monthSelect.innerHTML += `<option value="${mm}">${m}</option>`;
+    }
+
+    function updateDays() {
+      const year = parseInt(yearSelect.value);
+      const month = parseInt(monthSelect.value);
+      const days = new Date(year, month, 0).getDate();
+      daySelect.innerHTML = "";
+      for (let d = 1; d <= days; d++) {
+        const dd = d.toString().padStart(2, "0");
+        daySelect.innerHTML += `<option value="${dd}">${d}</option>`;
+      }
+    }
+
+    yearSelect.addEventListener("change", updateDays);
+    monthSelect.addEventListener("change", updateDays);
+    updateDays();
+
     const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
 
     fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
@@ -308,7 +304,6 @@ document.getElementById("checkinForm").addEventListener("submit", function () {
         if (data.result === "OK") {
           const checkinDate = data.checkin.split("T")[0];
           const checkoutDate = data.checkout.split("T")[0];
-
           document.getElementById("guestInfo").innerHTML =
             `<p><strong>名前：</strong>${name}</p>
              <p><strong>予約番号：</strong>${booking}</p>
@@ -323,9 +318,10 @@ document.getElementById("checkinForm").addEventListener("submit", function () {
         document.getElementById("guestInfo").innerText = translations[lang].network;
       });
 
-    // ✅ 送信処理
     document.getElementById("checkinForm").addEventListener("submit", function(e) {
       e.preventDefault();
+
+      hiddenDob.value = `${yearSelect.value}-${monthSelect.value}-${daySelect.value}`;
 
       const formData = new FormData(e.target);
       formData.append("name", name);
