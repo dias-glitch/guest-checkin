@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>Check-in WISEOWLHOSTELKYOTOログインページ</title>
+  <title>Check-in Login</title>
   <style>
     body {
       margin: 0;
@@ -20,7 +20,7 @@
       padding: 30px 40px;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 300px;
+      width: 320px;
       text-align: center;
     }
 
@@ -55,21 +55,104 @@
       color: red;
       margin-top: 10px;
     }
+
+    .lang-buttons {
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .lang-buttons button {
+      margin: 0 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="login-box">
-    <h3>WISE OWL HOSTEL KYOTO <h3>
-    <h2>ログイン</h2>
-        <form id="loginForm">
+    <div class="lang-buttons">
+      🌐 Language:
+      <button onclick="setLanguage('ja')">日本語</button>
+      <button onclick="setLanguage('en')">English</button>
+      <button onclick="setLanguage('es')">Español</button>
+      <button onclick="setLanguage('zh-CN')">简体中文</button>
+      <button onclick="setLanguage('zh-TW')">繁體中文</button>
+    </div>
+
+    <h2 id="title">ログイン</h2>
+    <form id="loginForm">
       <input type="text" id="guestName" placeholder="予約者名" required>
       <input type="text" id="bookingCode" placeholder="予約番号" required>
-      <button type="submit">ログイン</button>
+      <button type="submit" id="loginBtn">ログイン</button>
     </form>
     <p id="message"></p>
   </div>
 
   <script>
+    const translations = {
+      ja: {
+        title: "ログイン",
+        name: "予約者名",
+        code: "予約番号",
+        button: "ログイン",
+        error: "予約情報が一致しませんでした。",
+        network: "通信エラーが発生しました。"
+      },
+      en: {
+        title: "Login",
+        name: "Guest Name",
+        code: "Booking Code",
+        button: "Login",
+        error: "Reservation not found.",
+        network: "Network error occurred."
+      },
+      es: {
+        title: "Iniciar sesión",
+        name: "Nombre del huésped",
+        code: "Código de reserva",
+        button: "Entrar",
+        error: "No se encontró la reserva.",
+        network: "Error de red."
+      },
+      "zh-CN": {
+        title: "登录",
+        name: "预订者姓名",
+        code: "预订号码",
+        button: "登录",
+        error: "未找到预订信息。",
+        network: "网络错误。"
+      },
+      "zh-TW": {
+        title: "登入",
+        name: "預訂者姓名",
+        code: "預訂編號",
+        button: "登入",
+        error: "找不到預訂資訊。",
+        network: "網路錯誤。"
+      }
+    };
+
+    let currentLang = localStorage.getItem("lang") || navigator.language || "ja";
+    if (!translations[currentLang]) {
+      currentLang = currentLang.startsWith("zh") ? "zh-CN" : currentLang.startsWith("es") ? "es" : "en";
+    }
+
+    function applyLanguage(lang) {
+      const t = translations[lang];
+      document.getElementById("title").innerText = t.title;
+      document.getElementById("guestName").placeholder = t.name;
+      document.getElementById("bookingCode").placeholder = t.code;
+      document.getElementById("loginBtn").innerText = t.button;
+      localStorage.setItem("lang", lang);
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      applyLanguage(lang);
+    }
+
+    applyLanguage(currentLang);
+
     const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
 
     document.getElementById("loginForm").addEventListener("submit", function(e) {
@@ -83,11 +166,11 @@
           if (result === "OK") {
             window.location.href = `checkin.html?name=${encodeURIComponent(name)}&booking=${booking}`;
           } else {
-            document.getElementById("message").innerText = "予約情報が一致しませんでした。";
+            document.getElementById("message").innerText = translations[currentLang].error;
           }
         })
         .catch(() => {
-          document.getElementById("message").innerText = "通信エラーが発生しました。";
+          document.getElementById("message").innerText = translations[currentLang].network;
         });
     });
   </script>
