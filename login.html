@@ -76,16 +76,18 @@
   </style>
 </head>
 <body>
-  <div class="lang-buttons">
-  🌐 Language:
-  <select id="languageSelect" onchange="setLanguage(this.value)">
-    <option value="ja">日本語</option>
-    <option value="en">English</option>
-    <option value="es">Español</option>
-    <option value="zh-CN">简体中文</option>
-    <option value="zh-TW">繁體中文</option>
-  </select>
-</div>
+  <div class="login-box"> <!-- ←ここから始まる -->
+
+    <div class="lang-buttons">
+      🌐 Language:
+      <select id="languageSelect" onchange="setLanguage(this.value)">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="zh-CN">简体中文</option>
+        <option value="zh-TW">繁體中文</option>
+      </select>
+    </div>
 
     <h2 id="title">ログイン</h2>
     <form id="loginForm">
@@ -94,6 +96,7 @@
       <button type="submit" id="loginBtn">ログイン</button>
     </form>
     <p id="message"></p>
+
   </div>
 
   <script>
