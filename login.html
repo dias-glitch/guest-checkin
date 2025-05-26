@@ -57,34 +57,36 @@
     }
 
     .lang-buttons {
-      position: absolute;
+  position: absolute;
   top: 10px;
   left: 10px;
   font-size: 14px;
-  background-color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background-color: transparent;
   z-index: 999;
-    }
+}
 
-    .lang-buttons button {
-      margin: 0 4px;
-      padding: 4px 8px;
-      cursor: pointer;
-    }
+.lang-buttons select {
+  margin-left: 5px;
+  padding: 5px;
+  font-size: 14px;
+  background-color: #f2f2f2; /* 白っぽい灰色 */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
   </style>
 </head>
 <body>
   <div class="login-box">
     <div class="lang-buttons">
-      🌐 Language:
-      <button onclick="setLanguage('ja')">日本語</button>
-      <button onclick="setLanguage('en')">English</button>
-      <button onclick="setLanguage('es')">Español</button>
-      <button onclick="setLanguage('zh-CN')">简体中文</button>
-      <button onclick="setLanguage('zh-TW')">繁體中文</button>
-    </div>
+  🌐 Language:
+  <select id="languageSelect" onchange="setLanguage(this.value)">
+    <option value="ja">日本語</option>
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="zh-CN">简体中文</option>
+    <option value="zh-TW">繁體中文</option>
+  </select>
+</div>
 
     <h2 id="title">ログイン</h2>
     <form id="loginForm">
