@@ -100,30 +100,24 @@
       <option value="Vietnam" data-i18n-option="countryVietnam">Vietnam</option>
     </select>
 
-    <label id="labelPrev">前泊地:</label>
-    <input type="text" name="previousStay" required>
+      <label id="labelPrev">前泊地:</label>
+      <input type="text" name="previousStay" required>
 
-    <label id="labelNext">後泊地:</label>
-    <input type="text" name="nextDestination" required>
+      <label id="labelNext">後泊地:</label>
+      <input type="text" name="nextDestination" required>
 
-    <button type="submit" id="submitBtn">送信</button>
-  </form>
+      <button type="submit" id="submitBtn">送信</button>
+    </form>
 
-  <p id="message"></p>
+    <p id="message"></p>
   </div>
 
-  <!-- ✅ Select2 多言語UIの初期化 -->
   <script>
-    $(document).ready(function () {
-      $('#nationalitySelect').select2({
-        width: '100%',
-        minimumResultsForSearch: 5,
-        language: lang  // "ja", "en", "zh-CN", "ko" など
-      });
-    });
-  </script>
-
-  <script>
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name");
+    const booking = params.get("booking");
+    const lang = params.get("lang") || localStorage.getItem("lang") || "ja";
+    
     // ✅② 翻訳データ
     const translations = {
       ja: {
