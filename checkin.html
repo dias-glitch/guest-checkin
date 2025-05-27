@@ -4,16 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>チェックインフォーム</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- ✅ Select2（jQueryの後に読み込む） -->
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ja.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/zh-CN.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ko.js"></script>
-<!-- 必要な言語分だけ追加 -->
   <style>
     body {
       margin: 0;
@@ -37,18 +27,10 @@
       position: relative;
     }
 
-    .lang-box {
+    .language-select {
       position: absolute;
       top: 10px;
       right: 10px;
-    }
-
-    .lang-box select {
-      font-size: 14px;
-      padding: 4px 8px;
-      border-radius: 5px;
-      background-color: #f2f2f2;
-      border: 1px solid #ccc;
     }
 
     h2 {
@@ -62,8 +44,7 @@
       font-size: 15px;
     }
 
-    input,
-    select {
+    input, select {
       width: 100%;
       padding: 10px;
       font-size: 16px;
@@ -73,25 +54,6 @@
       box-sizing: border-box;
     }
 
-    .gender-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top:5px;
-      justify-content: flex-start;
-      
-    }
-
-    .gender-row label {
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-      white-space:nowrap;
-    }
-    .gender-row input{
-      margin-right:1.5px;
-    }
-    
     button {
       width: 100%;
       background-color: blue;
@@ -114,16 +76,12 @@
       color: green;
       font-size: 14px;
     }
-
-   
   </style>
 </head>
 <body>
   <div class="checkin-box">
-    
-    <!-- ✅① 言語切り替え -->
     <div class="language-select">
-      🌐 
+      🌐
       <select id="languageSelect" onchange="setLanguage(this.value)">
         <option value="ja">日本語</option>
         <option value="en">English</option>
@@ -139,8 +97,7 @@
 
     <form id="checkinForm">
       <label id="labelDob">生年月日:</label>
-        <input type="date" name="dob" required>
-      
+      <input type="date" name="dob" required>
 
       <label id="labelGender">性別:</label>
       <select name="gender" id="genderSelect" required>
@@ -148,36 +105,34 @@
         <option value="M" data-i18n-option="genderMale">男性</option>
         <option value="F" data-i18n-option="genderFemale">女性</option>
         <option value="Other" data-i18n-option="genderOther">その他</option>
-      </div>
+      </select>
 
       <label id="labelNationality">国籍:</label>
-<select name="nationality" id="nationalitySelect" class="select2" required>
-  <option value="" data-i18n-option="emptyNationality"></option>
-  <option value="Japan" data-i18n-option="countryJapan">Japan</option>
-  <option value="USA" data-i18n-option="countryUSA">USA</option>
-  <option value="China" data-i18n-option="countryChina">China</option>
-  <option value="Germany" data-i18n-option="countryGermany">Germany</option>
-  <option value="France" data-i18n-option="countryFrance">France</option>
-  <option value="Taiwan" data-i18n-option="countryTaiwan">Taiwan</option>
-  <option value="South Korea" data-i18n-option="countryKorea">South Korea</option>
-  <option value="Italy" data-i18n-option="countryItaly">Italy</option>
-  <option value="Switzerland" data-i18n-option="countrySwitzerland">Switzerland</option>
-  <option value="Russia" data-i18n-option="countryRussia">Russia</option>
-  <option value="Thailand" data-i18n-option="countryThailand">Thailand</option>
-  <option value="Vietnam" data-i18n-option="countryVietnam">Vietnam</option>
-</select>
-      
+      <select name="nationality" id="nationalitySelect" required>
+        <option value="">{emptyNationality}</option>
+        <option value="Japan" data-i18n-option="countryJapan">Japan</option>
+        <option value="USA" data-i18n-option="countryUSA">USA</option>
+        <option value="China" data-i18n-option="countryChina">China</option>
+        <option value="Germany" data-i18n-option="countryGermany">Germany</option>
+        <option value="France" data-i18n-option="countryFrance">France</option>
+        <option value="Taiwan" data-i18n-option="countryTaiwan">Taiwan</option>
+        <option value="South Korea" data-i18n-option="countryKorea">South Korea</option>
+        <option value="Italy" data-i18n-option="countryItaly">Italy</option>
+        <option value="Switzerland" data-i18n-option="countrySwitzerland">Switzerland</option>
+        <option value="Russia" data-i18n-option="countryRussia">Russia</option>
+        <option value="Thailand" data-i18n-option="countryThailand">Thailand</option>
+        <option value="Vietnam" data-i18n-option="countryVietnam">Vietnam</option>
+      </select>
 
       <label id="labelPrev">前泊地:</label>
-        <input type="text" name="previousStay" required>
-      
+      <input type="text" name="previousStay" required>
 
       <label id="labelNext">後泊地:</label>
-        <input type="text" name="nextDestination" required>
-      
+      <input type="text" name="nextDestination" required>
 
       <button type="submit" id="submitBtn">送信</button>
     </form>
+
     <p id="message"></p>
   </div>
 
@@ -417,13 +372,13 @@
     };
 
     // ✅③ 言語選択・保持・反映
-      const params = new URLSearchParams(window.location.search);
-      const name = params.get("name");
-      const booking = params.get("booking");
-      const lang = params.get("lang") || localStorage.getItem("lang") || "ja";
+        const params = new URLSearchParams(window.location.search);
+    const name = params.get("name");
+    const booking = params.get("booking");
+    const lang = params.get("lang") || localStorage.getItem("lang") || "ja";
 
     function applyLanguage(lang) {
-      const t = translations[lang];
+      const t = translations[lang] || translations["en"];
       document.getElementById("formTitle").innerText = t.formTitle;
       document.getElementById("labelDob").innerText = t.labelDob;
       document.getElementById("labelGender").innerText = t.labelGender;
@@ -435,22 +390,25 @@
       document.getElementById("languageSelect").value = lang;
       localStorage.setItem("lang", lang);
 
-      // 国籍プルダウン翻訳
-const options = document.querySelectorAll("#nationalitySelect option[data-i18n-option]");
-options.forEach(option => {
-  const key = option.getAttribute("data-i18n-option");
-  option.innerText = t[key];
-});
-document.querySelector("#nationalitySelect option[value='']").innerText = t.emptyNationality;
+      const nationalityOptions = document.querySelectorAll("#nationalitySelect option[data-i18n-option]");
+      nationalityOptions.forEach(option => {
+        const key = option.getAttribute("data-i18n-option");
+        option.innerText = t[key];
+      });
+      document.querySelector("#nationalitySelect option[value='']").innerText = t.emptyNationality;
 
-    // 性別プルダウンの翻訳
-const genderOptions = document.querySelectorAll("#genderSelect option[data-i18n-option]");
-genderOptions.forEach(option => {
-  const key = option.getAttribute("data-i18n-option");
-  option.innerText = t[key];
-});
-document.querySelector("#genderSelect option[value='']").innerText = t.emptyGender;
+      const genderOptions = document.querySelectorAll("#genderSelect option[data-i18n-option]");
+      genderOptions.forEach(option => {
+        const key = option.getAttribute("data-i18n-option");
+        option.innerText = t[key];
+      });
+      document.querySelector("#genderSelect option[value='']").innerText = t.emptyGender;
     }
+
+    function setLanguage(lang) {
+      applyLanguage(lang);
+    }
+
     applyLanguage(lang);
 
     const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
@@ -458,23 +416,20 @@ document.querySelector("#genderSelect option[value='']").innerText = t.emptyGend
     fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
       .then(res => res.json())
       .then(data => {
-        const t = translations[lang];  // ★翻訳データをここで読み込む
-
-  if (data.result === "OK") {
-    const checkinDate = data.checkin.split("T")[0];
-    const checkoutDate = data.checkout.split("T")[0];
-
-    document.getElementById("guestInfo").innerHTML =
-      `<p><strong>${t.labelName}</strong> ${name}</p>
-       <p><strong>${t.labelCode}</strong> ${booking}</p>
-       <p><strong>${t.labelCheckin}</strong> ${checkinDate}</p>
-       <p><strong>${t.labelCheckout}</strong> ${checkoutDate}</p>
-       <p><strong>${t.labelRoom}</strong> ${data.room}</p>`;
-  } else {
-    document.getElementById("guestInfo").innerText = t.notfound;
-  }
-})
-      
+        const t = translations[lang] || translations["en"];
+        if (data.result === "OK") {
+          const checkinDate = data.checkin.split("T")[0];
+          const checkoutDate = data.checkout.split("T")[0];
+          document.getElementById("guestInfo").innerHTML =
+            `<p><strong>${t.labelName}</strong> ${name}</p>
+             <p><strong>${t.labelCode}</strong> ${booking}</p>
+             <p><strong>${t.labelCheckin}</strong> ${checkinDate}</p>
+             <p><strong>${t.labelCheckout}</strong> ${checkoutDate}</p>
+             <p><strong>${t.labelRoom}</strong> ${data.room}</p>`;
+        } else {
+          document.getElementById("guestInfo").innerText = t.notfound;
+        }
+      })
       .catch(() => {
         document.getElementById("guestInfo").innerText = translations[lang].network;
       });
@@ -489,8 +444,8 @@ document.querySelector("#genderSelect option[value='']").innerText = t.emptyGend
         method: "POST",
         body: formData,
       })
-        .then((res) => res.text())
-        .then((res) => {
+        .then(res => res.text())
+        .then(res => {
           if (res === "RECEIVED") {
             document.getElementById("message").innerText = translations[lang].success;
             setTimeout(() => {
