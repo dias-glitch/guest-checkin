@@ -11,8 +11,8 @@
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ja.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/zh-CN.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ko.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/zh-CN.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ko.js"></script>
 <!-- 必要な言語分だけ追加 -->
   <style>
     body {
@@ -143,10 +143,11 @@
       
 
       <label id="labelGender">性別:</label>
-      <div class="gender-row">
-        <label><input type="radio" name="gender" value="M" required> M</label>
-        <label><input type="radio" name="gender" value="F"> F</label>
-        <label><input type="radio" name="gender" value="Other"> その他</label>
+      <select name="gender" id="genderSelect" required>
+        <option value="">{emptyGender}</option>
+        <option value="M" data-i18n-option="genderMale">男性</option>
+        <option value="F" data-i18n-option="genderFemale">女性</option>
+        <option value="Other" data-i18n-option="genderOther">その他</option>
       </div>
 
       <label id="labelNationality">国籍:</label>
@@ -158,12 +159,12 @@
   <option value="Germany" data-i18n-option="countryGermany">Germany</option>
   <option value="France" data-i18n-option="countryFrance">France</option>
   <option value="Taiwan" data-i18n-option="countryTaiwan">Taiwan</option>
-<option value="South Korea" data-i18n-option="countryKorea">South Korea</option>
-<option value="Italy" data-i18n-option="countryItaly">Italy</option>
-<option value="Switzerland" data-i18n-option="countrySwitzerland">Switzerland</option>
-<option value="Russia" data-i18n-option="countryRussia">Russia</option>
-<option value="Thailand" data-i18n-option="countryThailand">Thailand</option>
-<option value="Vietnam" data-i18n-option="countryVietnam">Vietnam</option>
+  <option value="South Korea" data-i18n-option="countryKorea">South Korea</option>
+  <option value="Italy" data-i18n-option="countryItaly">Italy</option>
+  <option value="Switzerland" data-i18n-option="countrySwitzerland">Switzerland</option>
+  <option value="Russia" data-i18n-option="countryRussia">Russia</option>
+  <option value="Thailand" data-i18n-option="countryThailand">Thailand</option>
+  <option value="Vietnam" data-i18n-option="countryVietnam">Vietnam</option>
 </select>
       
 
@@ -208,23 +209,27 @@
         notfound: "予約情報が見つかりませんでした。",
         network: "通信エラーが発生しました。",
         labelName: "名前：",
-      labelCode: "予約番号：",
-      labelCheckin: "チェックイン日：",
-      labelCheckout: "チェックアウト日：",
-      labelRoom: "部屋タイプ：",
+        labelCode: "予約番号：",
+        labelCheckin: "チェックイン日：",
+        labelCheckout: "チェックアウト日：",
+        labelRoom: "部屋タイプ：",
         emptyNationality: "選択してください",
-countryJapan: "日本",
-countryUSA: "アメリカ",
-countryChina: "中国",
-countryGermany: "ドイツ",
-countryFrance: "フランス",
+        countryJapan: "日本",
+        countryUSA: "アメリカ",
+        countryChina: "中国",
+        countryGermany: "ドイツ",
+        countryFrance: "フランス",
         countryTaiwan: "台湾",
-countryKorea: "韓国",
-countryItaly: "イタリア",
-countrySwitzerland: "スイス",
-countryRussia: "ロシア",
-countryThailand: "タイ",
-countryVietnam: "ベトナム"
+        countryKorea: "韓国",
+        countryItaly: "イタリア",
+        countrySwitzerland: "スイス",
+        countryRussia: "ロシア",
+        countryThailand: "タイ",
+        countryVietnam: "ベトナム"
+        emptyGender:"選択してください",
+        genderMale:"男性",
+        genderFemale:"女性",
+        genderOther:"その他"
       },
       en: {
         formTitle: "Check-in Information",
@@ -239,26 +244,30 @@ countryVietnam: "ベトナム"
         fail: "Submission failed.",
         notfound: "Reservation not found.",
         network: "Network error occurred.",
-         labelName: "Name:",
-      labelCode: "Booking Number:",
-      labelCheckin: "Check-in Date:",
-      labelCheckout: "Check-out Date:",
-      labelRoom: "Room Type:",
+        labelName: "Name:",
+        labelCode: "Booking Number:",
+        labelCheckin: "Check-in Date:",
+        labelCheckout: "Check-out Date:",
+        labelRoom: "Room Type:",
         emptyNationality: "Please select",
-countryJapan: "Japan",
-countryUSA: "USA",
-countryChina: "China",
-countryGermany: "Germany",
-countryFrance: "France",
+        countryJapan: "Japan",
+        countryUSA: "USA",
+        countryChina: "China",
+        countryGermany: "Germany",
+        countryFrance: "France",
         countryTaiwan: "Taiwan",
-countryKorea: "South Korea",
-countryItaly: "Italy",
-countrySwitzerland: "Switzerland",
-countryRussia: "Russia",
-countryThailand: "Thailand",
-countryVietnam: "Vietnam"
-        
-      },
+        countryKorea: "South Korea",
+        countryItaly: "Italy",
+        countrySwitzerland: "Switzerland",
+        countryRussia: "Russia",
+        countryThailand: "Thailand",
+        countryVietnam: "Vietnam",
+        emptyGender: "Please select",
+        genderMale: "Male",
+        genderFemale: "Female",
+        genderOther: "Other"
+         },
+    
       es: {
         formTitle: "Información de Check-in",
         labelDob: "Fecha de nacimiento:",
@@ -273,24 +282,29 @@ countryVietnam: "Vietnam"
         notfound: "No se encontró la reserva.",
         network: "Error de red.",
         labelName: "Nombre:",
-    labelCode: "Código de reserva:",
-    labelCheckin: "Fecha de entrada:",
-    labelCheckout: "Fecha de salida:",
-    labelRoom: "Tipo de habitación:",
+        labelCode: "Código de reserva:",
+        labelCheckin: "Fecha de entrada:",
+        labelCheckout: "Fecha de salida:",
+        labelRoom: "Tipo de habitación:",
         emptyNationality: "Seleccione",
-countryJapan: "Japón",
-countryUSA: "EE. UU.",
-countryChina: "China",
-countryGermany: "Alemania",
-countryFrance: "Francia",
+        countryJapan: "Japón",
+        countryUSA: "EE. UU.",
+        countryChina: "China",
+        countryGermany: "Alemania",
+        countryFrance: "Francia",
         countryTaiwan: "Taiwán",
-countryKorea: "Corea del Sur",
-countryItaly: "Italia",
-countrySwitzerland: "Suiza",
-countryRussia: "Rusia",
-countryThailand: "Tailandia",
-countryVietnam: "Vietnam"
+        countryKorea: "Corea del Sur",
+        countryItaly: "Italia",
+        countrySwitzerland: "Suiza",
+        countryRussia: "Rusia",
+        countryThailand: "Tailandia",
+        countryVietnam: "Vietnam",
+        emptyGender: "Seleccione",
+        genderMale: "Hombre",
+        genderFemale: "Mujer",
+        genderOther: "Otro",   
       },
+          
       "zh-CN": {
         formTitle: "入住信息",
         labelDob: "出生日期：",
@@ -305,24 +319,29 @@ countryVietnam: "Vietnam"
         notfound: "未找到预订信息。",
         network: "网络错误。",
         labelName: "姓名：",
-    labelCode: "预订号码：",
-    labelCheckin: "入住日期：",
-    labelCheckout: "退房日期：",
-    labelRoom: "房型：",
+        labelCode: "预订号码：",
+        labelCheckin: "入住日期：",
+        labelCheckout: "退房日期：",
+        labelRoom: "房型：",
         emptyNationality: "请选择",
-countryJapan: "日本",
-countryUSA: "美国",
-countryChina: "中国",
-countryGermany: "德国",
-countryFrance: "法国",
+        countryJapan: "日本",
+        countryUSA: "美国",
+        countryChina: "中国",
+        countryGermany: "德国",
+        countryFrance: "法国",
         countryTaiwan: "台湾",
-countryKorea: "韩国",
-countryItaly: "意大利",
-countrySwitzerland: "瑞士",
-countryRussia: "俄罗斯",
-countryThailand: "泰国",
-countryVietnam: "越南"
+        countryKorea: "韩国",
+        countryItaly: "意大利",
+        countrySwitzerland: "瑞士",
+        countryRussia: "俄罗斯",
+        countryThailand: "泰国",
+        countryVietnam: "越南",
+        emptyGender: "请选择",
+        genderMale: "男",
+        genderFemale: "女",
+        genderOther: "其他"
       },
+        
       "zh-TW": {
         formTitle: "入住資訊",
         labelDob: "出生日期：",
@@ -337,63 +356,71 @@ countryVietnam: "越南"
         notfound: "找不到預訂資訊。",
         network: "網路錯誤。",
         labelName: "姓名：",
-    labelCode: "預訂編號：",
-    labelCheckin: "入住日期：",
-    labelCheckout: "退房日期：",
-    labelRoom: "房型：",
+        labelCode: "預訂編號：",
+        labelCheckin: "入住日期：",
+        labelCheckout: "退房日期：",
+        labelRoom: "房型：",
         emptyNationality: "請選擇",
-countryJapan: "日本",
-countryUSA: "美國",
-countryChina: "中國",
-countryGermany: "德國",
-countryFrance: "法國",
+        countryJapan: "日本",
+        countryUSA: "美國",
+        countryChina: "中國",
+        countryGermany: "德國",
+        countryFrance: "法國",
         countryTaiwan: "台灣",
-countryKorea: "韓國",
-countryItaly: "義大利",
-countrySwitzerland: "瑞士",
-countryRussia: "俄羅斯",
-countryThailand: "泰國",
-countryVietnam: "越南"
+        countryKorea: "韓國",
+        countryItaly: "義大利",
+        countrySwitzerland: "瑞士",
+        countryRussia: "俄羅斯",
+        countryThailand: "泰國",
+        countryVietnam: "越南",
+        emptyGender: "請選擇",
+        genderMale: "男",
+        genderFemale: "女",
+        genderOther: "其他",
       },
-    ko: {
-  formTitle: "체크인 정보",
-  labelDob: "생년월일:",
-  labelGender: "성별:",
-  labelNationality: "국적:",
-  labelPrev: "이전 숙소:",
-  labelNext: "다음 목적지:",
-  submit: "제출",
-  loading: "불러오는 중...",
-  success: "제출이 완료되었습니다. 3초 후에 메인 페이지로 이동합니다.",
-  fail: "제출에 실패했습니다.",
-  notfound: "예약 정보를 찾을 수 없습니다.",
-  network: "네트워크 오류가 발생했습니다.",
-  labelName: "이름:",
-  labelCode: "예약 번호:",
-  labelCheckin: "체크인 날짜:",
-  labelCheckout: "체크아웃 날짜:",
-  labelRoom: "객실 유형:",
-  emptyNationality: "선택하세요",
-  countryJapan: "일본",
-  countryUSA: "미국",
-  countryChina: "중국",
-  countryGermany: "독일",
-  countryFrance: "프랑스",
-  countryTaiwan: "대만",
-  countryKorea: "대한민국",
-  countryItaly: "이탈리아",
-  countrySwitzerland: "스위스",
-  countryRussia: "러시아",
-  countryThailand: "태국",
-  countryVietnam: "베트남"
-} 
+    "ko": {
+        formTitle: "체크인 정보",
+        labelDob: "생년월일:",
+        labelGender: "성별:",
+        labelNationality: "국적:",
+        labelPrev: "이전 숙소:",
+        labelNext: "다음 목적지:",
+        submit: "제출",
+        loading: "불러오는 중...",
+        success: "제출이 완료되었습니다. 3초 후에 메인 페이지로 이동합니다.",
+        fail: "제출에 실패했습니다.",
+        notfound: "예약 정보를 찾을 수 없습니다.",
+        network: "네트워크 오류가 발생했습니다.",
+        labelName: "이름:",
+        labelCode: "예약 번호:",
+        labelCheckin: "체크인 날짜:",
+        labelCheckout: "체크아웃 날짜:",
+        labelRoom: "객실 유형:",
+        emptyNationality: "선택하세요",
+        countryJapan: "일본",
+        countryUSA: "미국",
+        countryChina: "중국",
+        countryGermany: "독일",
+        countryFrance: "프랑스",
+        countryTaiwan: "대만",
+        countryKorea: "대한민국",
+        countryItaly: "이탈리아",
+        countrySwitzerland: "스위스",
+        countryRussia: "러시아",
+        countryThailand: "태국",
+        countryVietnam: "베트남",
+        emptyGender: "선택하세요",
+        genderMale: "남성",
+        genderFemale: "여성",
+        genderOther: "기타"
+       } 
     };
 
     // ✅③ 言語選択・保持・反映
-     const params = new URLSearchParams(window.location.search);
-    const name = params.get("name");
-    const booking = params.get("booking");
-    const lang = params.get("lang") || localStorage.getItem("lang") || "ja";
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get("name");
+      const booking = params.get("booking");
+      const lang = params.get("lang") || localStorage.getItem("lang") || "ja";
 
     function applyLanguage(lang) {
       const t = translations[lang];
@@ -421,6 +448,13 @@ document.querySelector("#nationalitySelect option[value='']").innerText = t.empt
       applyLanguage(lang);
     }
 
+    // 性別プルダウンの翻訳
+const genderOptions = document.querySelectorAll("#genderSelect option[data-i18n-option]");
+genderOptions.forEach(option => {
+  const key = option.getAttribute("data-i18n-option");
+  option.innerText = t[key];
+});
+document.querySelector("#genderSelect option[value='']").innerText = t.emptyGender;
     applyLanguage(lang);
 
     const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
