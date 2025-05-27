@@ -229,7 +229,7 @@
         emptyGender:"選択してください",
         genderMale:"男性",
         genderFemale:"女性",
-        genderOther:"その他"
+        genderOther:"その他",
       },
       en: {
         formTitle: "Check-in Information",
@@ -265,7 +265,7 @@
         emptyGender: "Please select",
         genderMale: "Male",
         genderFemale: "Female",
-        genderOther: "Other"
+        genderOther: "Other",
          },
     
       es: {
@@ -339,7 +339,7 @@
         emptyGender: "请选择",
         genderMale: "男",
         genderFemale: "女",
-        genderOther: "其他"
+        genderOther: "其他",
       },
         
       "zh-TW": {
@@ -412,7 +412,7 @@
         emptyGender: "선택하세요",
         genderMale: "남성",
         genderFemale: "여성",
-        genderOther: "기타"
+        genderOther: "기타",
        } 
     };
 
@@ -442,11 +442,6 @@ options.forEach(option => {
   option.innerText = t[key];
 });
 document.querySelector("#nationalitySelect option[value='']").innerText = t.emptyNationality;
-    }
-
-    function setLanguage(lang) {
-      applyLanguage(lang);
-    }
 
     // 性別プルダウンの翻訳
 const genderOptions = document.querySelectorAll("#genderSelect option[data-i18n-option]");
