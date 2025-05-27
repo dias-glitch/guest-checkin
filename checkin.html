@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>チェックインフォーム</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ja.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ko.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/zh-CN.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -15,7 +22,6 @@
       align-items: center;
       min-height: 100vh;
     }
-
     .checkin-box {
       background-color: white;
       padding: 30px 25px;
@@ -26,114 +32,81 @@
       box-sizing: border-box;
       position: relative;
     }
-
     .language-select {
       position: absolute;
       top: 10px;
       right: 10px;
     }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-size: 15px;
-    }
-
+    label { display: block; margin-top: 15px; }
     input, select {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      margin-top: 5px;
-      box-sizing: border-box;
+      width: 100%; padding: 10px; margin-top: 5px;
+      font-size: 16px; border-radius: 5px; border: 1px solid #ccc;
     }
-
     button {
-      width: 100%;
-      background-color: blue;
-      color: white;
-      padding: 12px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      margin-top: 25px;
-      cursor: pointer;
+      width: 100%; background-color: blue; color: white;
+      padding: 12px; font-size: 16px; border: none;
+      border-radius: 5px; margin-top: 25px; cursor: pointer;
     }
-
-    button:hover {
-      background-color: darkblue;
-    }
-
-    #message {
-      text-align: center;
-      margin-top: 15px;
-      color: green;
-      font-size: 14px;
-    }
+    button:hover { background-color: darkblue; }
+    #message { text-align: center; margin-top: 15px; color: green; font-size: 14px; }
   </style>
 </head>
 <body>
-  <div class="checkin-box">
-    <div class="language-select">
-      🌐
-      <select id="languageSelect" onchange="setLanguage(this.value)">
-        <option value="ja">日本語</option>
-        <option value="en">English</option>
-        <option value="es">Español</option>
-        <option value="zh-CN">简体中文</option>
-        <option value="zh-TW">繁體中文</option>
-        <option value="ko">한국어</option>
-      </select>
-    </div>
+<div class="checkin-box">
+  <div class="language-select">
+    🌐
+    <select id="languageSelect" onchange="setLanguage(this.value)">
+      <option value="ja">日本語</option>
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="zh-CN">简体中文</option>
+      <option value="zh-TW">繁體中文</option>
+      <option value="ko">한국어</option>
+    </select>
+  </div>
 
-    <h2 id="formTitle">チェックイン情報</h2>
-    <div id="guestInfo">読み込み中...</div>
+  <h2 id="formTitle">チェックイン情報</h2>
+  <div id="guestInfo">読み込み中...</div>
 
-    <form id="checkinForm">
-      <label id="labelDob">生年月日:</label>
-      <input type="date" name="dob" required>
+  <form id="checkinForm">
+    <label id="labelDob">生年月日:</label>
+    <input type="date" name="dob" required>
 
-      <label id="labelGender">性別:</label>
-      <select name="gender" id="genderSelect" required>
-        <option value="">{emptyGender}</option>
-        <option value="M" data-i18n-option="genderMale">男性</option>
-        <option value="F" data-i18n-option="genderFemale">女性</option>
-        <option value="Other" data-i18n-option="genderOther">その他</option>
-      </select>
+    <label id="labelGender">性別:</label>
+    <select name="gender" id="genderSelect" required>
+      <option value="">{emptyGender}</option>
+      <option value="M" data-i18n-option="genderMale">男性</option>
+      <option value="F" data-i18n-option="genderFemale">女性</option>
+      <option value="Other" data-i18n-option="genderOther">その他</option>
+    </select>
 
-      <label id="labelNationality">国籍:</label>
-      <select name="nationality" id="nationalitySelect" required>
-        <option value="">{emptyNationality}</option>
-        <option value="Japan" data-i18n-option="countryJapan">Japan</option>
-        <option value="USA" data-i18n-option="countryUSA">USA</option>
-        <option value="China" data-i18n-option="countryChina">China</option>
-        <option value="Germany" data-i18n-option="countryGermany">Germany</option>
-        <option value="France" data-i18n-option="countryFrance">France</option>
-        <option value="Taiwan" data-i18n-option="countryTaiwan">Taiwan</option>
-        <option value="South Korea" data-i18n-option="countryKorea">South Korea</option>
-        <option value="Italy" data-i18n-option="countryItaly">Italy</option>
-        <option value="Switzerland" data-i18n-option="countrySwitzerland">Switzerland</option>
-        <option value="Russia" data-i18n-option="countryRussia">Russia</option>
-        <option value="Thailand" data-i18n-option="countryThailand">Thailand</option>
-        <option value="Vietnam" data-i18n-option="countryVietnam">Vietnam</option>
-      </select>
+    <label id="labelNationality">国籍:</label>
+    <select name="nationality" id="nationalitySelect" required>
+      <option value="">{emptyNationality}</option>
+      <option value="Japan" data-i18n-option="countryJapan">Japan</option>
+      <option value="USA" data-i18n-option="countryUSA">USA</option>
+      <option value="China" data-i18n-option="countryChina">China</option>
+      <option value="Germany" data-i18n-option="countryGermany">Germany</option>
+      <option value="France" data-i18n-option="countryFrance">France</option>
+      <option value="Taiwan" data-i18n-option="countryTaiwan">Taiwan</option>
+      <option value="South Korea" data-i18n-option="countryKorea">South Korea</option>
+      <option value="Italy" data-i18n-option="countryItaly">Italy</option>
+      <option value="Switzerland" data-i18n-option="countrySwitzerland">Switzerland</option>
+      <option value="Russia" data-i18n-option="countryRussia">Russia</option>
+      <option value="Thailand" data-i18n-option="countryThailand">Thailand</option>
+      <option value="Vietnam" data-i18n-option="countryVietnam">Vietnam</option>
+    </select>
 
-      <label id="labelPrev">前泊地:</label>
-      <input type="text" name="previousStay" required>
+    <label id="labelPrev">前泊地:</label>
+    <input type="text" name="previousStay" required>
 
-      <label id="labelNext">後泊地:</label>
-      <input type="text" name="nextDestination" required>
+    <label id="labelNext">後泊地:</label>
+    <input type="text" name="nextDestination" required>
 
-      <button type="submit" id="submitBtn">送信</button>
-    </form>
+    <button type="submit" id="submitBtn">送信</button>
+  </form>
 
-    <p id="message"></p>
+  <p id="message"></p>
   </div>
 
   <!-- ✅ Select2 多言語UIの初期化 -->
@@ -373,99 +346,84 @@
 
     // ✅③ 言語選択・保持・反映
  <script>
-  const params = new URLSearchParams(window.location.search);
-  const name = params.get("name");
-  const booking = params.get("booking");
-  const lang = params.get("lang") || localStorage.getItem("lang") || "ja";
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name");
+const booking = params.get("booking");
+const lang = params.get("lang") || localStorage.getItem("lang") || "ja";
 
-  function applyLanguage(lang) {
-    const t = translations[lang] || translations["en"];
+function applyLanguage(lang) {
+  const t = translations[lang] || translations.en;
+  document.getElementById("formTitle").innerText = t.formTitle;
+  document.getElementById("labelDob").innerText = t.labelDob;
+  document.getElementById("labelGender").innerText = t.labelGender;
+  document.getElementById("labelNationality").innerText = t.labelNationality;
+  document.getElementById("labelPrev").innerText = t.labelPrev;
+  document.getElementById("labelNext").innerText = t.labelNext;
+  document.getElementById("submitBtn").innerText = t.submit;
+  document.getElementById("guestInfo").innerText = t.loading;
+  document.getElementById("languageSelect").value = lang;
+  localStorage.setItem("lang", lang);
 
-    // テキスト反映
-    document.getElementById("formTitle").innerText = t.formTitle;
-    document.getElementById("labelDob").innerText = t.labelDob;
-    document.getElementById("labelGender").innerText = t.labelGender;
-    document.getElementById("labelNationality").innerText = t.labelNationality;
-    document.getElementById("labelPrev").innerText = t.labelPrev;
-    document.getElementById("labelNext").innerText = t.labelNext;
-    document.getElementById("submitBtn").innerText = t.submit;
-    document.getElementById("guestInfo").innerText = t.loading;
-    document.getElementById("languageSelect").value = lang;
-    localStorage.setItem("lang", lang);
+  document.querySelector("#nationalitySelect option[value='']").innerText = t.emptyNationality;
+  document.querySelectorAll("#nationalitySelect option[data-i18n-option]").forEach(opt => {
+    opt.innerText = t[opt.dataset.i18nOption];
+  });
 
-    // 国籍プルダウン翻訳
-    const nationalityOptions = document.querySelectorAll("#nationalitySelect option[data-i18n-option]");
-    nationalityOptions.forEach(option => {
-      const key = option.getAttribute("data-i18n-option");
-      option.innerText = t[key];
-    });
-    const nationalityEmpty = document.querySelector("#nationalitySelect option[value='']");
-    if (nationalityEmpty) nationalityEmpty.innerText = t.emptyNationality;
+  document.querySelector("#genderSelect option[value='']").innerText = t.emptyGender;
+  document.querySelectorAll("#genderSelect option[data-i18n-option]").forEach(opt => {
+    opt.innerText = t[opt.dataset.i18nOption];
+  });
 
-    // 性別プルダウン翻訳
-    const genderOptions = document.querySelectorAll("#genderSelect option[data-i18n-option]");
-    genderOptions.forEach(option => {
-      const key = option.getAttribute("data-i18n-option");
-      option.innerText = t[key];
-    });
-    const genderEmpty = document.querySelector("#genderSelect option[value='']");
-    if (genderEmpty) genderEmpty.innerText = t.emptyGender;
-  }
+  $('#nationalitySelect').select2({ width: '100%', minimumResultsForSearch: 5, language: lang });
+}
 
-  function setLanguage(lang) {
-    applyLanguage(lang);
-  }
+function setLanguage(lang) {
+  applyLanguage(lang);
+}
 
-  applyLanguage(lang);  // 初期表示時にも反映
+applyLanguage(lang);
 
-  const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
 
-  fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
-    .then(res => res.json())
-    .then(data => {
-      const t = translations[lang] || translations["en"];
-      if (data.result === "OK") {
-        const checkinDate = data.checkin.split("T")[0];
-        const checkoutDate = data.checkout.split("T")[0];
-        document.getElementById("guestInfo").innerHTML = `
-          <p><strong>${t.labelName}</strong> ${name}</p>
-          <p><strong>${t.labelCode}</strong> ${booking}</p>
-          <p><strong>${t.labelCheckin}</strong> ${checkinDate}</p>
-          <p><strong>${t.labelCheckout}</strong> ${checkoutDate}</p>
-          <p><strong>${t.labelRoom}</strong> ${data.room}</p>`;
+fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
+  .then(res => res.json())
+  .then(data => {
+    const t = translations[lang] || translations.en;
+    if (data.result === "OK") {
+      document.getElementById("guestInfo").innerHTML = `
+        <p><strong>${t.labelName}</strong> ${name}</p>
+        <p><strong>${t.labelCode}</strong> ${booking}</p>
+        <p><strong>${t.labelCheckin}</strong> ${data.checkin?.split("T")[0]}</p>
+        <p><strong>${t.labelCheckout}</strong> ${data.checkout?.split("T")[0]}</p>
+        <p><strong>${t.labelRoom}</strong> ${data.room}</p>`;
+    } else {
+      document.getElementById("guestInfo").innerText = t.notfound;
+    }
+  })
+  .catch(() => {
+    document.getElementById("guestInfo").innerText = translations[lang].network;
+  });
+
+document.getElementById("checkinForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  formData.append("name", name);
+  formData.append("booking", booking);
+
+  fetch(scriptURL, { method: "POST", body: formData })
+    .then(res => res.text())
+    .then(res => {
+      if (res === "RECEIVED") {
+        document.getElementById("message").innerText = translations[lang].success;
+        setTimeout(() => window.location.href = "https://wiseowlhostels.com/kyoto/", 3000);
       } else {
-        document.getElementById("guestInfo").innerText = t.notfound;
+        document.getElementById("message").innerText = translations[lang].fail;
       }
     })
     .catch(() => {
-      document.getElementById("guestInfo").innerText = translations[lang].network;
+      document.getElementById("message").innerText = translations[lang].network;
     });
-
-  document.getElementById("checkinForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    formData.append("name", name);
-    formData.append("booking", booking);
-
-    fetch(scriptURL, {
-      method: "POST",
-      body: formData,
-    })
-      .then(res => res.text())
-      .then(res => {
-        if (res === "RECEIVED") {
-          document.getElementById("message").innerText = translations[lang].success;
-          setTimeout(() => {
-            window.location.href = "https://wiseowlhostels.com/kyoto/";
-          }, 3000);
-        } else {
-          document.getElementById("message").innerText = translations[lang].fail;
-        }
-      })
-      .catch(() => {
-        document.getElementById("message").innerText = translations[lang].network;
-      });
-  });
+});
 </script>
 </body>
 </html>
