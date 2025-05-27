@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Check-in Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       margin: 0;
@@ -20,7 +21,9 @@
       padding: 30px 40px;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 320px;
+      width: 100%;
+      max-width: 360px;
+      box-sizing: border-box;
       text-align: center;
     }
 
@@ -28,22 +31,26 @@
       margin-bottom: 20px;
     }
 
-    .login-box input {
+    .login-box input,
+    .login-box select,
+    .login-box button {
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
-      border: 1px solid #ccc;
       border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .login-box input,
+    .login-box select {
+      border: 1px solid #ccc;
     }
 
     .login-box button {
-      width: 100%;
       background-color: blue;
       color: white;
-      padding: 10px;
       border: none;
-      border-radius: 5px;
-      font-size: 16px;
       cursor: pointer;
     }
 
@@ -56,20 +63,19 @@
       margin-top: 10px;
     }
 
-    .lang-buttons {
-      margin-bottom: 15px;
-      font-size: 14px;
+    .language-select {
+      margin-bottom: 10px;
+      text-align: right;
     }
 
-    .lang-buttons button {
-      margin: 0 4px;
-      padding: 4px 8px;
-      cursor: pointer;
+    .language-select select {
+      font-size: 14px;
+      padding: 4px 6px;
     }
   </style>
 </head>
 <body>
- <div class="login-box">
+  <div class="login-box">
     <div class="language-select">
       🌐 
       <select id="languageSelect" onchange="setLanguage(this.value)">
@@ -78,6 +84,7 @@
         <option value="es">Español</option>
         <option value="zh-CN">简体中文</option>
         <option value="zh-TW">繁體中文</option>
+        <option value="ko">한국어</option>
       </select>
     </div>
 
@@ -131,12 +138,22 @@
         button: "登入",
         error: "找不到預訂資訊。",
         network: "網路錯誤。"
+      },
+      ko: {
+        title: "로그인",
+        name: "예약자 이름",
+        code: "예약 번호",
+        button: "로그인",
+        error: "예약 정보를 찾을 수 없습니다.",
+        network: "네트워크 오류가 발생했습니다."
       }
     };
 
     let currentLang = localStorage.getItem("lang") || navigator.language || "ja";
     if (!translations[currentLang]) {
-      currentLang = currentLang.startsWith("zh") ? "zh-CN" : currentLang.startsWith("es") ? "es" : "en";
+      currentLang = currentLang.startsWith("zh") ? "zh-CN" :
+                    currentLang.startsWith("es") ? "es" :
+                    currentLang.startsWith("ko") ? "ko" : "en";
     }
 
     function applyLanguage(lang) {
