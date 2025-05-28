@@ -411,7 +411,7 @@
 
     applyLanguage(lang);
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzt0XjDc0-vbyRlojF2b1JdMOxNuNKijLy0z84vX40HCb8XOg3oW6hZ5PSLERzhSMsGMA/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwu21bKgnUY3vrKH3aTLfuBzjquKPbqF0qsKhEJHtSA4aWiSo0um4FFyIfEVUHdZwD99g/exec";
 
     fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${booking}&mode=info`)
       .then(res => res.json())
