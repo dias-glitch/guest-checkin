@@ -450,6 +450,7 @@
       fetch(scriptURL, {
         method: "POST",
         body: formData,
+        redirect: "follow"
       })
         .then(res => res.text())
         .then(res => {
