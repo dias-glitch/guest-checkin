@@ -216,10 +216,9 @@
       document.getElementById("spinner").style.display = "block";
 
       fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}`)
-        .then(res => res.json()) // .text() から .json() に変更
+        .then(res => res.json())
         .then(data => {
-          if (data.result === "OK") { // data.result を見るように変更
-            // ログイン成功時に必要な情報を次のページに引き継ぐ
+          if (data.result === "OK") {
             const params = new URLSearchParams({
               name: name,
               booking: booking,
@@ -234,9 +233,16 @@
           }
         })
         .catch((err) => {
-          console.error(err); // エラー内容をコンソールに出力
+          console.error(err);
           showMessage(translations[currentLang].network);
         })
+        .finally(() => {
+          // ここでボタンの状態を元に戻す処理が必要です
+          document.getElementById("loginBtn").disabled = false;
+          document.getElementById("loginBtn").innerText = translations[currentLang].button;
+          document.getElementById("spinner").style.display = "none";
+        });
+    }); // ← ここで addEventListener を閉じる
 
     function showMessage(msg) {
       const m = document.getElementById("message");
