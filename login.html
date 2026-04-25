@@ -215,35 +215,38 @@
       document.getElementById("loginBtn").innerText = "Loading...";
       document.getElementById("spinner").style.display = "block";
 
-      // --- ここから書き換え ---
-      fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}`, {
-        method: "GET",
-        mode: "cors", // これを追加
-      })
-      .then(res => {
-        if (!res.ok) throw new Error('Network response was not ok');
-        return res.json();
-      })
-      .then(data => {
-        if (data.result === "OK") {
-          const params = new URLSearchParams({
-            name: name,
-            booking: booking,
-            lang: currentLang,
-            checkin: data.checkin,
-            checkout: data.checkout,
-            room: data.room
-          });
-          window.location.href = `checkin.html?${params.toString()}`;
-        } else {
-          showMessage(translations[currentLang].error);
-        }
-      })
-      // --- ここまで ---
+  // --- ここから書き換え ---
+      fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}`)
+        .then(res => {
+          if (!res.ok) throw new Error('Network response was not ok');
+          return res.json();
+        })
+        .then(data => {
+          if (data.result === "OK") {
+            const params = new URLSearchParams({
+              name: name,
+              booking: booking,
+              lang: currentLang,
+              checkin: data.checkin,
+              checkout: data.checkout,
+              room: data.room
+            });
+            window.location.href = `checkin.html?${params.toString()}`;
+          } else {
+            showMessage(translations[currentLang].error);
+          }
+        })
         .catch((err) => {
-          console.error(err);
+          console.error("Login Fetch Error:", err);
           showMessage(translations[currentLang].network);
         })
+        .finally(() => {
+          document.getElementById("loginBtn").disabled = false;
+          document.getElementById("loginBtn").innerText = translations[currentLang].button;
+          document.getElementById("spinner").style.display = "none";
+        });
+      // --- ここまで ---
+      
         .finally(() => {
           // ここでボタンの状態を元に戻す処理が必要です
           document.getElementById("loginBtn").disabled = false;
