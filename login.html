@@ -215,23 +215,31 @@
       document.getElementById("loginBtn").innerText = "Loading...";
       document.getElementById("spinner").style.display = "block";
 
-      fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.result === "OK") {
-            const params = new URLSearchParams({
-              name: name,
-              booking: booking,
-              lang: currentLang,
-              checkin: data.checkin,
-              checkout: data.checkout,
-              room: data.room
-            });
-            window.location.href = `checkin.html?${params.toString()}`;
-          } else {
-            showMessage(translations[currentLang].error);
-          }
-        })
+      // --- ここから書き換え ---
+      fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}`, {
+        method: "GET",
+        mode: "cors", // これを追加
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then(data => {
+        if (data.result === "OK") {
+          const params = new URLSearchParams({
+            name: name,
+            booking: booking,
+            lang: currentLang,
+            checkin: data.checkin,
+            checkout: data.checkout,
+            room: data.room
+          });
+          window.location.href = `checkin.html?${params.toString()}`;
+        } else {
+          showMessage(translations[currentLang].error);
+        }
+      })
+      // --- ここまで ---
         .catch((err) => {
           console.error(err);
           showMessage(translations[currentLang].network);
