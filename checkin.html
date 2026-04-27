@@ -430,7 +430,7 @@
 
     applyLanguage(lang);
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxiTDAfbhjUM4hv4DwQcA4xzaPLwXm2W0Wze0SIPPyAbP4GZKtDKd51BhLvGN9LwWAq4w/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxY0PmVaEg2cxsYCQ30qLQtt3WeBSXErompfKbS363usF5IF2otujGigCsmmKxX1ume/exec";
 
     fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}&mode=info`)
       .then(res => res.json())
@@ -463,7 +463,7 @@
       fetch(scriptURL, {
         method: "POST",
         body: formData,
-        mode: "no-cors" // ★重要：Googleとの通信エラー（CORSエラー）を回避する魔法の1行
+        
       })
       .then(() => {
         // mode: "no-cors" の場合、レスポンスの中身は読めませんが
