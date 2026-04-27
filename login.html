@@ -129,7 +129,8 @@
         code: "予約番号",
         button: "ログイン",
         error: "予約情報が一致しませんでした。",
-        network: "通信エラーが発生しました。"
+        network: "通信エラーが発生しました。",
+        loading:"読み込み中"
       },
       en: {
         title: "Login",
@@ -138,6 +139,7 @@
         button: "Login",
         error: "Reservation not found.",
         network: "Network error occurred."
+        loading:"Loading"
       },
       es: {
         title: "Iniciar sesión",
@@ -245,15 +247,7 @@
           document.getElementById("loginBtn").innerText = translations[currentLang].button;
           document.getElementById("spinner").style.display = "none";
         });
-      // --- ここまで ---
-      
-        .finally(() => {
-          // ここでボタンの状態を元に戻す処理が必要です
-          document.getElementById("loginBtn").disabled = false;
-          document.getElementById("loginBtn").innerText = translations[currentLang].button;
-          document.getElementById("spinner").style.display = "none";
-        });
-    }); // ← ここで addEventListener を閉じる
+      // --- ここまで --
 
     function showMessage(msg) {
       const m = document.getElementById("message");
