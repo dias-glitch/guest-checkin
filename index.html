@@ -430,7 +430,7 @@
 
     applyLanguage(lang);
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzglzV6zt9PKrXGSor6zZ4gb-4-odDT5uHxIS-Iy4i93dPtAJ6Yrl3wfPstDWAfA76j0g/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbx5Q30YteiNvn1qmYMXk2AAjcTialMnyXkY4WE2miLwBZhCRpQg6p4JSX6h1JiVLvSmqw/exec";
 
     fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}&mode=info`)
       .then(res => res.json())
