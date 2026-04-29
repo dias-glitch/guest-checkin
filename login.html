@@ -224,25 +224,31 @@
           return res.json();
         })
         .then(data => {
-          if (data.result === "OK") {
-            else if (data.result === "MULTIPLE_MATCH") {
+  if (data.result === "OK") {
 
-  showMessage("Please enter your full name");
+    const params = new URLSearchParams({
+      name: name,
+      booking: booking,
+      lang: currentLang,
+      checkin: data.checkin,
+      checkout: data.checkout,
+      room: data.room
+    });
+    window.location.href = `checkin.html?${params.toString()}`;
 
-}
-            const params = new URLSearchParams({
-              name: name,
-              booking: booking,
-              lang: currentLang,
-              checkin: data.checkin,
-              checkout: data.checkout,
-              room: data.room
-            });
-            window.location.href = `checkin.html?${params.toString()}`;
-          } else {
-            showMessage(translations[currentLang].error);
-          }
-        })
+  } else if (data.result === "MULTIPLE_MATCH") {
+
+    showMessage("Please enter your full name");
+
+  } else if (data.result === "NAME_MISMATCH") {
+
+    showMessage("Name does not match");
+
+  } else {
+
+    showMessage(translations[currentLang].error);
+  }
+})
         .catch((err) => {
           console.error("Login Fetch Error:", err);
           showMessage(translations[currentLang].network);
