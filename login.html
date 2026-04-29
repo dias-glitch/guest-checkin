@@ -218,66 +218,98 @@
       document.getElementById("spinner").style.display = "block";
 
   // --- ここから書き換え ---
-      fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}`)
-        .then(res => {
-          if (!res.ok) throw new Error('Network response was not ok');
-          return res.json();
-        })
-        .then(data => {
-  if (data.result === "OK") {
+      const scriptURL = "https://script.google.com/macros/s/●●●/exec";
 
-    const params = new URLSearchParams({
-      name: name,
-      booking: booking,
-      lang: currentLang,
-      checkin: data.checkin,
-      checkout: data.checkout,
-      room: data.room
-    });
-    window.location.href = `checkin.html?${params.toString()}`;
+document.getElementById("loginForm").addEventListener("submit", function(e) {
 
-  } else if (data.result === "MULTIPLE_MATCH") {
+  e.preventDefault();
 
-    showMessage("Please enter your full name");
+  const name = normalizeName(document.getElementById("guestName").value);
 
-  } else if (data.result === "NAME_MISMATCH") {
+  const booking = normalizeBookingCode(document.getElementById("bookingCode").value);
 
-    showMessage("Name does not match");
+  document.getElementById("loginBtn").disabled = true;
 
-  } else {
+  document.getElementById("spinner").style.display = "block";
 
-    showMessage(translations[currentLang].error);
-  }
-})
-        .catch((err) => {
-          console.error("Login Fetch Error:", err);
-          showMessage(translations[currentLang].network);
-        })
-        .finally(() => {
-          document.getElementById("loginBtn").disabled = false;
-          document.getElementById("loginBtn").innerText = translations[currentLang].button;
-          document.getElementById("spinner").style.display = "none";
+  fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}`)
+
+    .then(res => res.text())
+
+    .then(text => {
+
+      const data = JSON.parse(text);
+
+      if (data.result === "OK") {
+
+        const params = new URLSearchParams({
+
+          name,
+
+          booking,
+
+          checkin: data.checkin,
+
+          checkout: data.checkout,
+
+          room: data.room
+
         });
-      // --- ここまで -
+
+        window.location.href = `checkin.html?${params.toString()}`;
+
+      } else if (data.result === "MULTIPLE_MATCH") {
+
+        showMessage("Please enter your full name");
+
+      } else if (data.result === "NAME_MISMATCH") {
+
+        showMessage("Name does not match");
+
+      } else {
+
+        showMessage("Reservation not found");
+
+      }
+
+    })
+
+    .catch(() => {
+
+      showMessage("Network error");
+
+    })
+
+    .finally(() => {
+
+      document.getElementById("loginBtn").disabled = false;
+
+      document.getElementById("spinner").style.display = "none";
+
     });
-    function showMessage(msg) {
-      const m = document.getElementById("message");
-      m.innerText = msg;
-      m.style.opacity = 1;
-      setTimeout(() => {
-        m.style.opacity = 0;
-        setTimeout(() => m.innerText = "", 500);
-      }, 4000);
-    }
 
-    function normalizeName(name) {
-      return name.trim().replace(/\s+/g, " ").toLowerCase();
-    }
+});
 
-    function normalizeBookingCode(code) {
-      return code.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s =>
-        String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).trim();
-    }
-  </script>
+function normalizeName(name) {
+
+  return name.replace(/\s+/g, "").toLowerCase();
+
+}
+
+function normalizeBookingCode(code) {
+
+  return code.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s =>
+
+    String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).trim();
+
+}
+
+function showMessage(msg) {
+
+  document.getElementById("message").innerText = msg;
+
+}
+
+</script>
 </body>
 </html>
