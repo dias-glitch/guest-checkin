@@ -455,13 +455,6 @@
 
     document.getElementById("checkinForm").addEventListener("submit", function (e) {
       e.preventDefault();
-      const formData = new FormData(e.target);
-      formData.append("name", name);
-      formData.append("booking", booking);
-
-      // --- 修正後の fetch 処理 ---
-document.getElementById("checkinForm").addEventListener("submit", function (e) {
-      e.preventDefault();
       
       // 送信ボタンを無効化（二重送信防止）
       const btn = document.getElementById("submitBtn");
@@ -475,8 +468,6 @@ document.getElementById("checkinForm").addEventListener("submit", function (e) {
       fetch(scriptURL, {
         method: "POST",
         body: formData,
-        // mode: "no-cors" は使わず、デフォルトのままにする
-        // redirect: "follow" は fetch のデフォルトですが、明記すると確実です
         redirect: "follow" 
       })
       .then(res => {
@@ -507,4 +498,3 @@ document.getElementById("checkinForm").addEventListener("submit", function (e) {
   </script>
 </body>
 </html>
-
