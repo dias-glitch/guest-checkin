@@ -216,10 +216,17 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
 
   document.getElementById("spinner").style.display = "block";
 
-  fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}`)
-
-    .then(res => res.json())
-
+ // 修正後の fetch 処理
+  fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}`, {
+    method: "GET",
+    mode: "cors",      // CORS（ドメインを越えた通信）を許可
+    redirect: "follow" // Googleのリダイレクトを追いかける設定（超重要！）
+  })
+    .then(res => {
+      // 応答が正常か確認（リダイレクト後はここを通る）
+      if (!res.ok) throw new Error("Network response was not ok");
+      return res.json();
+    })
     .then(data => {
 
       if (data.result === "OK") {
