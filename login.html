@@ -198,27 +198,9 @@
       applyLanguage(lang);
     }
 
-    applyLanguage(currentLang);
+   applyLanguage(currentLang);
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbx5Q30YteiNvn1qmYMXk2AAjcTialMnyXkY4WE2miLwBZhCRpQg6p4JSX6h1JiVLvSmqw/exec";
-
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const name = normalizeName(document.getElementById("guestName").value);
-      const booking = normalizeBookingCode(document.getElementById("bookingCode").value);
-
-      const bookingPattern = /^[A-Za-z0-9\- ]{4,12}$/;
-      if (!bookingPattern.test(booking)) {
-        showMessage(translations[currentLang].code + "：正しい形式で入力してください（例：ABC123 または AB-1234）。");
-        return;
-      }
-
-      document.getElementById("loginBtn").disabled = true;
-      document.getElementById("loginBtn").innerText = translations[currentLang].loading;
-      document.getElementById("spinner").style.display = "block";
-
-  // --- ここから書き換え ---
-      const scriptURL = "https://script.google.com/macros/s/●●●/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbx5Q30YteiNvn1qmYMXk2AAjcTialMnyXkY4WE2miLwBZhCRpQg6p4JSX6h1JiVLvSmqw/exec";
 
 document.getElementById("loginForm").addEventListener("submit", function(e) {
 
@@ -230,15 +212,15 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
 
   document.getElementById("loginBtn").disabled = true;
 
+  document.getElementById("loginBtn").innerText = translations[currentLang].loading;
+
   document.getElementById("spinner").style.display = "block";
 
   fetch(`${scriptURL}?name=${encodeURIComponent(name)}&booking=${encodeURIComponent(booking)}`)
 
-    .then(res => res.text())
+    .then(res => res.json())
 
-    .then(text => {
-
-      const data = JSON.parse(text);
+    .then(data => {
 
       if (data.result === "OK") {
 
@@ -247,6 +229,8 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
           name,
 
           booking,
+
+          lang: currentLang,
 
           checkin: data.checkin,
 
@@ -260,15 +244,15 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
 
       } else if (data.result === "MULTIPLE_MATCH") {
 
-        showMessage("Please enter your full name");
+        showMessage(translations[currentLang].multiple);
 
       } else if (data.result === "NAME_MISMATCH") {
 
-        showMessage("Name does not match");
+        showMessage(translations[currentLang].mismatch);
 
       } else {
 
-        showMessage("Reservation not found");
+        showMessage(translations[currentLang].error);
 
       }
 
@@ -276,7 +260,7 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
 
     .catch(() => {
 
-      showMessage("Network error");
+      showMessage(translations[currentLang].network);
 
     })
 
@@ -284,11 +268,21 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
 
       document.getElementById("loginBtn").disabled = false;
 
+      document.getElementById("loginBtn").innerText = translations[currentLang].button;
+
       document.getElementById("spinner").style.display = "none";
 
     });
 
 });
+
+function showMessage(msg) {
+
+  const m = document.getElementById("message");
+
+  m.innerText = msg;
+
+}
 
 function normalizeName(name) {
 
@@ -301,12 +295,6 @@ function normalizeBookingCode(code) {
   return code.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s =>
 
     String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).trim();
-
-}
-
-function showMessage(msg) {
-
-  document.getElementById("message").innerText = msg;
 
 }
 
