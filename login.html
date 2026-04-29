@@ -225,6 +225,11 @@
         })
         .then(data => {
           if (data.result === "OK") {
+            else if (data.result === "MULTIPLE_MATCH") {
+
+  showMessage("Please enter your full name");
+
+}
             const params = new URLSearchParams({
               name: name,
               booking: booking,
