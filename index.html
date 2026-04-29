@@ -460,37 +460,50 @@
       formData.append("booking", booking);
 
       // --- 修正後の fetch 処理 ---
+document.getElementById("checkinForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      
+      // 送信ボタンを無効化（二重送信防止）
+      const btn = document.getElementById("submitBtn");
+      btn.disabled = true;
+
+      const formData = new FormData(e.target);
+      formData.append("name", name);
+      formData.append("booking", booking);
+
+      // --- 修正後の fetch 処理 ---
       fetch(scriptURL, {
-  method: "POST",
-  body: formData
-})
-.then(res => res.json())   // ← これ必須
-.then(data => {
+        method: "POST",
+        body: formData,
+        // mode: "no-cors" は使わず、デフォルトのままにする
+        // redirect: "follow" は fetch のデフォルトですが、明記すると確実です
+        redirect: "follow" 
+      })
+      .then(res => {
+        // GASからの応答が正常（リダイレクト成功含む）か確認
+        if (!res.ok && res.type !== 'opaque') throw new Error("Network response was not ok");
+        return res.json();
+      })
+      .then(data => {
+        if (data.result === "OK") {
+          document.getElementById("message").style.color = "green";
+          document.getElementById("message").innerText = translations[lang].success;
 
-  if (data.result === "OK") {
-
-    document.getElementById("message").style.color = "green";
-    document.getElementById("message").innerText = translations[lang].success;
-
-    setTimeout(() => {
-      window.location.href = "https://wiseowlhostels.com/kyoto/";
-    }, 3000);
-
-  } else {
-
-    document.getElementById("message").style.color = "red";
-    document.getElementById("message").innerText = translations[lang].fail;
-
-  }
-
-})
-.catch((error) => {
-
-  console.error("Error:", error);
-  document.getElementById("message").style.color = "red";
-  document.getElementById("message").innerText = translations[lang].network;
-
-});
+          setTimeout(() => {
+            window.location.href = "https://wiseowlhostels.com/kyoto/";
+          }, 3000);
+        } else {
+          throw new Error(data.message || "Server Error");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        document.getElementById("message").style.color = "red";
+        document.getElementById("message").innerText = translations[lang].network;
+        // エラー時はボタンを再度有効化
+        btn.disabled = false;
+      });
+    });
   </script>
 </body>
 </html>
